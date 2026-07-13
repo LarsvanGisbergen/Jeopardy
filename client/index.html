@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Local Jeopardy Suite</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="background-layer"></div>
+    <header class="topbar">
+      <h1>Local Jeopardy Suite</h1>
+      <nav>
+        <a href="/build" data-route-link="/build">Build</a>
+        <a href="/play" data-route-link="/play">Play</a>
+      </nav>
+    </header>
+
+    <main id="app" class="app-shell"></main>
+
+    <template id="build-view-template">
+      <section class="panel">
+        <h2>Pack Builder</h2>
+        <p class="muted">Create, edit, validate, and manage your local game packs.</p>
+
+        <div class="create-pack-grid">
+          <label>Title <input id="new-pack-title" type="text" placeholder="Friday Trivia Night" /></label>
+          <label>Columns <input id="new-pack-cols" type="number" min="1" max="12" value="6" /></label>
+          <label>Rows <input id="new-pack-rows" type="number" min="1" max="10" value="5" /></label>
+          <label>Start Value <input id="new-pack-start-value" type="number" min="1" value="100" /></label>
+          <label>Value Step <input id="new-pack-step-value" type="number" min="1" value="100" /></label>
+          <button id="create-pack-btn" class="button button-primary">Create Pack</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="split-heading">
+          <h3>All Packs</h3>
+          <label class="checkbox-row">
+            <input id="show-archived-toggle" type="checkbox" />
+            Show archived
+          </label>
+        </div>
+        <div id="pack-list" class="pack-list"></div>
+      </section>
+
+      <section class="panel" id="editor-panel">
+        <h3>Editor</h3>
+        <p class="muted">Pick a pack to edit.</p>
+      </section>
+    </template>
+
+    <template id="play-view-template">
+      <section class="panel" id="play-intro-panel">
+        <h2>Game Host Panel</h2>
+        <p class="muted">Load a ready pack, add teams, and host your game offline.</p>
+      </section>
+
+      <section class="panel" id="play-setup-panel">
+        <h3>Setup</h3>
+        <div class="setup-grid">
+          <label>Ready Pack
+            <select id="play-pack-select"></select>
+          </label>
+          <button id="load-pack-btn" class="button button-primary">Load Pack</button>
+        </div>
+        <div class="team-controls">
+          <h4>Teams</h4>
+          <div id="team-list"></div>
+          <button id="add-team-btn" class="button">Add Team</button>
+          <label class="test-mode-toggle">
+            <input type="checkbox" id="test-mode-toggle" />
+            Test mode
+          </label>
+        </div>
+      </section>
+
+      <section class="panel hidden" id="play-board-panel">
+        <div class="split-heading" id="play-board-header">
+          <h3 id="active-pack-title">Board</h3>
+          <button id="reset-board-btn" class="button">Reset Used Clues</button>
+        </div>
+        <div id="game-board" class="board-grid"></div>
+        <div id="host-scorebar" class="host-scorebar"></div>
+      </section>
+
+      <section class="panel hidden" id="elimination-panel">
+        <div class="elimination-top">
+          <h2>Elimination Round</h2>
+          <p id="elimination-progress" class="muted"></p>
+        </div>
+        <h3 id="elim-question-prompt" class="elim-prompt"></h3>
+        <div class="slider-shell">
+          <div class="slider-axis-labels">
+            <span id="elim-min-label">0</span>
+            <span id="elim-max-label">0</span>
+          </div>
+          <div id="team-slider-stack" class="team-slider-stack"></div>
+          <p id="elim-answer-reveal" class="elim-answer hidden"></p>
+        </div>
+        <div id="elim-team-values" class="elim-team-values"></div>
+        <div class="dialog-actions">
+          <button id="elim-reveal-answer-btn" class="button button-reveal">Reveal Number</button>
+          <button id="elim-score-btn" class="button button-primary">Apply Penalties</button>
+          <button id="elim-next-btn" class="button">Next Question</button>
+        </div>
+      </section>
+
+      <section class="panel hidden" id="victory-panel">
+        <div class="victory-spark victory-spark-a"></div>
+        <div class="victory-spark victory-spark-b"></div>
+        <div class="victory-spark victory-spark-c"></div>
+        <div class="victory-content">
+          <p class="victory-label">Champion</p>
+          <h1 id="victory-title">Winner</h1>
+          <p id="victory-score" class="clue-value"></p>
+        </div>
+      </section>
+    </template>
+
+    <dialog id="clue-dialog">
+      <article class="dialog-content">
+        <h3 id="dialog-category"></h3>
+        <p id="dialog-value" class="clue-value"></p>
+        <p id="daily-double-banner" class="daily-double hidden">Daily Double</p>
+        <p id="dialog-question" class="clue-question"></p>
+        <p id="dialog-answer" class="clue-answer hidden"></p>
+
+        <div class="dialog-actions dialog-main-actions">
+          <button id="reveal-answer-btn" class="button button-reveal">Reveal Answer</button>
+          <button id="mark-used-btn" class="button button-primary button-complete">Mark Used & Close</button>
+        </div>
+        <button id="close-dialog-btn" class="button button-close-corner" title="Close without marking this clue used">Close</button>
+      </article>
+    </dialog>
+
+    <script src="/app.js" defer></script>
+  </body>
+  </html>

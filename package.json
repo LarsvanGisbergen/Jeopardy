@@ -1,0 +1,48 @@
+{
+  "name": "local-jeopardy-suite",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Offline Jeopardy-style game host + pack builder",
+  "main": "electron-main.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "electron": "electron .",
+    "test:desktop": "electron .",
+    "package:win": "electron-packager . LocalJeopardySuite --platform=win32 --arch=x64 --out=release --overwrite --prune=true --icon=assets/jeopardy.ico --executable-name=Jeopardy --ignore=\"^/release$\" --ignore=\"^/\\.git$\"",
+    "package:portable": "electron-builder --win portable"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "electron": "^42.2.0",
+    "electron-builder": "^24.13.3",
+    "electron-packager": "^17.1.2"
+  },
+  "build": {
+    "appId": "com.local.jeopardy.suite",
+    "productName": "Local Jeopardy Suite",
+    "forceCodeSigning": false,
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "client/**/*",
+      "server/**/*",
+      "data/**/*",
+      "electron-main.js",
+      "package.json"
+    ],
+    "asar": true,
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    }
+  }
+}

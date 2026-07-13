@@ -1,0 +1,11 @@
+{
+  "packs": [
+    {
+      "id": "default-trivia-ready-v1",
+      "title": "Default Trivia Night Pack",
+      "status": "ready",
+      "updatedAt": "2026-05-17T15:44:57.372Z",
+      "fileName": "default trivia night pack.json"
+    }
+  ]
+}

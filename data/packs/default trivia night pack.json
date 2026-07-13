@@ -1,0 +1,250 @@
+{
+  "id": "default-trivia-ready-v1",
+  "title": "Default Trivia Night Pack",
+  "status": "ready",
+  "createdAt": "2026-05-17T10:00:00.000Z",
+  "updatedAt": "2026-05-17T15:44:57.372Z",
+  "board": {
+    "rows": 5,
+    "cols": 6,
+    "categories": [
+      {
+        "name": "Geography",
+        "clues": [
+          {
+            "question": "This is the capital city of Canada.",
+            "answer": "What is Ottawa?",
+            "value": 100,
+            "dailyDouble": true
+          },
+          {
+            "question": "The Nile River flows into this sea.",
+            "answer": "What is the Mediterranean Sea?",
+            "value": 200,
+            "dailyDouble": false
+          },
+          {
+            "question": "Mount Kilimanjaro is located in this country.",
+            "answer": "What is Tanzania?",
+            "value": 300,
+            "dailyDouble": false
+          },
+          {
+            "question": "This desert covers much of northern Africa.",
+            "answer": "What is the Sahara?",
+            "value": 400,
+            "dailyDouble": true
+          },
+          {
+            "question": "This country has the most natural lakes in the world.",
+            "answer": "What is Canada?",
+            "value": 500,
+            "dailyDouble": false
+          }
+        ]
+      },
+      {
+        "name": "Science",
+        "clues": [
+          {
+            "question": "This planet is known as the Red Planet.",
+            "answer": "What is Mars?",
+            "value": 100,
+            "dailyDouble": false
+          },
+          {
+            "question": "H2O is the chemical formula for this.",
+            "answer": "What is water?",
+            "value": 200,
+            "dailyDouble": false
+          },
+          {
+            "question": "This force keeps us on the ground.",
+            "answer": "What is gravity?",
+            "value": 300,
+            "dailyDouble": false
+          },
+          {
+            "question": "The process plants use to make food is called this.",
+            "answer": "What is photosynthesis?",
+            "value": 400,
+            "dailyDouble": false
+          },
+          {
+            "question": "This is the hardest natural substance on Earth.",
+            "answer": "What is diamond?",
+            "value": 500,
+            "dailyDouble": true
+          }
+        ]
+      },
+      {
+        "name": "History",
+        "clues": [
+          {
+            "question": "He was the first president of the United States.",
+            "answer": "Who is George Washington?",
+            "value": 100,
+            "dailyDouble": false
+          },
+          {
+            "question": "This wall fell in 1989, symbolizing the end of the Cold War divide.",
+            "answer": "What is the Berlin Wall?",
+            "value": 200,
+            "dailyDouble": false
+          },
+          {
+            "question": "The Titanic sank in this year.",
+            "answer": "What is 1912?",
+            "value": 300,
+            "dailyDouble": false
+          },
+          {
+            "question": "This empire built Machu Picchu.",
+            "answer": "What is the Inca Empire?",
+            "value": 400,
+            "dailyDouble": false
+          },
+          {
+            "question": "This document begins with 'We the People'.",
+            "answer": "What is the U.S. Constitution?",
+            "value": 500,
+            "dailyDouble": true
+          }
+        ]
+      },
+      {
+        "name": "Pop Culture",
+        "clues": [
+          {
+            "question": "This singer is known as the 'King of Pop'.",
+            "answer": "Who is Michael Jackson?",
+            "value": 100,
+            "dailyDouble": false
+          },
+          {
+            "question": "In Harry Potter, this is the name of Harry's owl.",
+            "answer": "Who is Hedwig?",
+            "value": 200,
+            "dailyDouble": false
+          },
+          {
+            "question": "This 1997 film features the ship RMS Titanic.",
+            "answer": "What is Titanic?",
+            "value": 300,
+            "dailyDouble": false
+          },
+          {
+            "question": "Mario's brother in Nintendo games is this character.",
+            "answer": "Who is Luigi?",
+            "value": 400,
+            "dailyDouble": false
+          },
+          {
+            "question": "This TV series features the Iron Throne.",
+            "answer": "What is Game of Thrones?",
+            "value": 500,
+            "dailyDouble": false
+          }
+        ]
+      },
+      {
+        "name": "Sports",
+        "clues": [
+          {
+            "question": "A basketball team has this many players on court at one time.",
+            "answer": "What is five?",
+            "value": 100,
+            "dailyDouble": false
+          },
+          {
+            "question": "The Olympics are typically held every this many years.",
+            "answer": "What is four?",
+            "value": 200,
+            "dailyDouble": false
+          },
+          {
+            "question": "This country won the 2018 FIFA World Cup.",
+            "answer": "What is France?",
+            "value": 300,
+            "dailyDouble": false
+          },
+          {
+            "question": "In tennis, this term means zero points.",
+            "answer": "What is love?",
+            "value": 400,
+            "dailyDouble": false
+          },
+          {
+            "question": "This athlete has won the most Olympic gold medals.",
+            "answer": "Who is Michael Phelps?",
+            "value": 500,
+            "dailyDouble": false
+          }
+        ]
+      },
+      {
+        "name": "Food & Drink",
+        "clues": [
+          {
+            "question": "This fruit keeps the doctor away, according to the proverb.",
+            "answer": "What is an apple?",
+            "value": 100,
+            "dailyDouble": false
+          },
+          {
+            "question": "Sushi is a cuisine that originated in this country.",
+            "answer": "What is Japan?",
+            "value": 200,
+            "dailyDouble": false
+          },
+          {
+            "question": "Guacamole is primarily made from this fruit.",
+            "answer": "What is avocado?",
+            "value": 300,
+            "dailyDouble": false
+          },
+          {
+            "question": "This spice is derived from the Crocus flower.",
+            "answer": "What is saffron?",
+            "value": 400,
+            "dailyDouble": true
+          },
+          {
+            "question": "Espresso originated in this country.",
+            "answer": "What is Italy?",
+            "value": 500,
+            "dailyDouble": false
+          }
+        ]
+      }
+    ]
+  },
+  "settings": {
+    "eliminationRound": {
+      "questions": [
+        {
+          "prompt": "How many milliliters are in one liter?",
+          "min": 100,
+          "max": 5000,
+          "answer": 1000,
+          "step": 50
+        },
+        {
+          "prompt": "How many minutes are in one day?",
+          "min": 60,
+          "max": 3000,
+          "answer": 1440,
+          "step": 10
+        },
+        {
+          "prompt": "How many bones does an adult human typically have?",
+          "min": 100,
+          "max": 300,
+          "answer": 206,
+          "step": 1
+        }
+      ]
+    }
+  }
+}
