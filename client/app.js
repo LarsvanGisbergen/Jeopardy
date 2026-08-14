@@ -827,6 +827,8 @@ function isBoardComplete() {
  * @param {HTMLElement} hostScorebar
  */
 function renderHostScorebar(hostScorebar) {
+  const correctScore = playState.lastClueValue;
+  const incorrectPenalty = playState.lastClueValue / 2;
   const nextRoundButton = isBoardComplete()
     ? `<button id="next-round-btn" class="button button-primary" title="Proceed to elimination round">Start Next Round</button>`
     : "";
@@ -834,7 +836,7 @@ function renderHostScorebar(hostScorebar) {
     <div class="host-scorebar-heading">
       <strong>Scores</strong>
       <div class="host-scorebar-meta">
-        <span>Clue value: <strong>$${playState.lastClueValue}</strong></span>
+        <span>Correct: <strong>+$${correctScore}</strong> · Incorrect: <strong>-$${incorrectPenalty}</strong></span>
         ${nextRoundButton}
         ${playState.testMode ? '<button id="debug-use-all-btn" class="button button-small" title="Debug: use all board clues">Use All</button>' : ""}
       </div>
@@ -853,8 +855,8 @@ function renderHostScorebar(hostScorebar) {
       </div>
       <strong class="team-score-number">${team.score}</strong>
       <div class="score-controls">
-        <button class="button button-small" title="Add current clue value" data-host-score="${team.id}" data-dir="plus">+</button>
-        <button class="button button-small" title="Subtract current clue value" data-host-score="${team.id}" data-dir="minus">-</button>
+        <button class="button button-small" title="Add the full current clue value" data-host-score="${team.id}" data-dir="plus">+$${correctScore}</button>
+        <button class="button button-small" title="Subtract half the current clue value" data-host-score="${team.id}" data-dir="minus">-$${incorrectPenalty}</button>
       </div>
     `;
     grid.appendChild(row);
@@ -868,9 +870,9 @@ function renderHostScorebar(hostScorebar) {
       const target = playState.teams.find((team) => team.id === teamId);
       if (!target) return;
       if (dir === "minus") {
-        target.score = Math.max(0, target.score - playState.lastClueValue);
+        target.score = Math.max(0, target.score - incorrectPenalty);
       } else {
-        target.score += playState.lastClueValue;
+        target.score += correctScore;
       }
       renderBoard();
     });

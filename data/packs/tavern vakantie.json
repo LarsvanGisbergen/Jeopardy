@@ -1,0 +1,264 @@
+{
+  "id": "tavern-vakantie-v1",
+  "title": "Tavern Vakantie",
+  "status": "ready",
+  "createdAt": "2026-08-10T12:00:00.000Z",
+  "updatedAt": "2026-08-10T12:00:00.000Z",
+  "board": {
+    "rows": 6,
+    "cols": 6,
+    "categories": [
+      {
+        "name": "FANTASY & SCI-FI",
+        "clues": [
+          {
+            "question": "Bij welk huis wordt Harry Potter ingedeeld?",
+            "answer": "Griffoendor/Gryffindor",
+            "value": 100,
+            "dailyDouble": false
+          },
+          {
+            "question": "Welk fantasywezen sterft in vlammen en wordt uit zijn eigen as herboren?",
+            "answer": "Feniks/Phoenix",
+            "value": 200,
+            "dailyDouble": false
+          },
+          {
+            "question": "In The Matrix, welke kleur pil kiest Neo om de waarheid te ontdekken?",
+            "answer": "Rood",
+            "value": 300,
+            "dailyDouble": false
+          },
+          {
+            "question": "Hoe heet het continent waarop het grootste deel van Game of Thrones zich afspeelt?",
+            "answer": "Westeros",
+            "value": 400,
+            "dailyDouble": false
+          },
+          {
+            "question": "Hoe heet de oorspronkelijke Dark Lord en meester van Sauron in Tolkiens legendarium?",
+            "answer": "Morgoth",
+            "value": 500,
+            "dailyDouble": false
+          },
+          {
+            "question": "Hoe heet de demon lord die bekendstaat als de Prince of Demons en vaak wordt afgebeeld met twee bavianenkoppen en tentakelarmen in D&D?",
+            "answer": "Demogorgon",
+            "value": 750,
+            "dailyDouble": true
+          }
+        ]
+      },
+      {
+        "name": "SCIENCE",
+        "clues": [
+          {
+            "question": "Hoeveel poten heeft een spin?",
+            "answer": "8",
+            "value": 100,
+            "dailyDouble": false
+          },
+          {
+            "question": "Welke planeet staat het dichtst bij de zon?",
+            "answer": "Mercurius",
+            "value": 200,
+            "dailyDouble": false
+          },
+          {
+            "question": "Hoe heet de schaal waarmee de zuurgraad van een stof wordt aangegeven?",
+            "answer": "pH-schaal",
+            "value": 300,
+            "dailyDouble": false
+          },
+          {
+            "question": "Wat is de meest voorkomende stof in het menselijk lichaam, gemeten naar massa?",
+            "answer": "Water",
+            "value": 400,
+            "dailyDouble": false
+          },
+          {
+            "question": "Hoe heet de grens rond een zwart gat waarbinnen niets meer kan ontsnappen?",
+            "answer": "Event horizon",
+            "value": 500,
+            "dailyDouble": false
+          },
+          {
+            "question": "Hoe heet het natuurkundige effect waarbij de golflengte van licht en geluid verandert doordat bron en waarnemer ten opzichte van elkaar bewegen?",
+            "answer": "Doppler effect",
+            "value": 750,
+            "dailyDouble": false
+          }
+        ]
+      },
+      {
+        "name": "GAMES",
+        "clues": [
+          {
+            "question": "Welke MMORPG speelt zich grotendeels af in de wereld Azeroth?",
+            "answer": "World of Warcraft",
+            "value": 100,
+            "dailyDouble": false
+          },
+          {
+            "question": "Welk wezen moet je verslaan om Minecraft traditioneel “uit te spelen”?",
+            "answer": "Ender Dragon",
+            "value": 200,
+            "dailyDouble": false
+          },
+          {
+            "question": "Welke bekende Final Fantasy-vogel wordt in FFXIV gebruikt als rijdier?",
+            "answer": "Chocobo",
+            "value": 300,
+            "dailyDouble": false
+          },
+          {
+            "question": "Welke League of Legends-champion heeft een ultimate genaamd \"The Skies Descend\"?",
+            "answer": "Aurelion Sol",
+            "value": 400,
+            "dailyDouble": false
+          },
+          {
+            "question": "Hoeveel dollar kost een AWP in Counter Strike 2?",
+            "answer": "$4750",
+            "value": 500,
+            "dailyDouble": false
+          },
+          {
+            "question": "In Baldur’s Gate 3, welk wapen heb je nodig om de ketenen van Orpheus te breken?",
+            "answer": "Orphic Hammer",
+            "value": 750,
+            "dailyDouble": false
+          }
+        ]
+      },
+      {
+        "name": "ORIGINS",
+        "clues": [
+          {
+            "question": "Uit welk land komt LEGO?",
+            "answer": "Denemarken",
+            "value": 100,
+            "dailyDouble": false
+          },
+          {
+            "question": "Uit welk land komt het automerk Volvo?",
+            "answer": "Zweden",
+            "value": 200,
+            "dailyDouble": false
+          },
+          {
+            "question": "In welk land werd de moderne sauna-cultuur beroemd en ontwikkeld?",
+            "answer": "Finland",
+            "value": 300,
+            "dailyDouble": false
+          },
+          {
+            "question": "Welke wereldwijd bekende instantmaaltijd werd in 1958 in Japan uitgevonden door Momofuku Ando?",
+            "answer": "Instant Noodles",
+            "value": 400,
+            "dailyDouble": false
+          },
+          {
+            "question": "Uit welke sport ontstond de term “hat-trick”?",
+            "answer": "Cricket",
+            "value": 500,
+            "dailyDouble": false
+          },
+          {
+            "question": "Het Engelse woord “candidate” komt van het Latijnse candidus, omdat Romeinse kandidaten kleding droegen van welke kleur?",
+            "answer": "Wit",
+            "value": 750,
+            "dailyDouble": false
+          }
+        ]
+      },
+      {
+        "name": "GEOGRAPHY",
+        "clues": [
+          {
+            "question": "Binnen welk continent ligt Egypte?",
+            "answer": "Afrika",
+            "value": 100,
+            "dailyDouble": false
+          },
+          {
+            "question": "Welke rivier stroomt door Londen?",
+            "answer": "Thames",
+            "value": 200,
+            "dailyDouble": false
+          },
+          {
+            "question": "Welke bergketen vormt een groot deel van de grens tussen Frankrijk en Spanje?",
+            "answer": "Pyreneeën",
+            "value": 300,
+            "dailyDouble": false
+          },
+          {
+            "question": "Welk land ligt volledig binnen Zuid-Afrika?",
+            "answer": "Lesotho",
+            "value": 400,
+            "dailyDouble": false
+          },
+          {
+            "question": "Ik begin mijn reis in de hoofdstad van Spanje. Ik reis 10.000 km naar het oosten en blijf op dezelfde breedtegraad. In welk land eindig ik?",
+            "answer": "China",
+            "value": 500,
+            "dailyDouble": false
+          },
+          {
+            "question": "Welk land heeft, inclusief overzeese gebieden, de meeste tijdzones ter wereld?",
+            "answer": "Frankrijk",
+            "value": 750,
+            "dailyDouble": false
+          }
+        ]
+      },
+      {
+        "name": "RANDOM",
+        "clues": [
+          {
+            "question": "Welke kleur krijg je als je blauw en geel mengt?",
+            "answer": "Groen",
+            "value": 100,
+            "dailyDouble": false
+          },
+          {
+            "question": "Welk bordspel bevat straten als Kalverstraat en Leidsestraat in de Nederlandse versie?",
+            "answer": "Monopoly",
+            "value": 200,
+            "dailyDouble": false
+          },
+          {
+            "question": "Hoe heet de angst voor spinnen?",
+            "answer": "Arachnophobia",
+            "value": 300,
+            "dailyDouble": false
+          },
+          {
+            "question": "Welk fictief personage woont op 221B Baker Street?",
+            "answer": "Sherlock Holmes",
+            "value": 400,
+            "dailyDouble": false
+          },
+          {
+            "question": "Welke letter komt niet voor in de naam van een Amerikaanse staat?",
+            "answer": "Q",
+            "value": 500,
+            "dailyDouble": false
+          },
+          {
+            "question": "Welke kleur heeft de “black box” van een vliegtuig in werkelijkheid meestal?",
+            "answer": "Oranje",
+            "value": 750,
+            "dailyDouble": false
+          }
+        ]
+      }
+    ]
+  },
+  "settings": {
+    "eliminationRound": {
+      "questions": []
+    }
+  }
+}
