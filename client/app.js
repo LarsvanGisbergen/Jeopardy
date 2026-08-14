@@ -155,6 +155,7 @@ const playState = {
   readyPacks: [],
   /** @type {Pack | null} */
   pack: null,
+  selectedPackId: "",
   isLive: false,
   phase: "board",
   /** @type {{ id: string; name: string; score: number; }[]} */
@@ -170,6 +171,8 @@ const playState = {
   currentClue: null,
   eliminationIndex: 0,
   eliminationRevealed: false,
+  eliminationStage: "guess",
+  eliminationDraggingTeamId: "",
   /** @type {Map<string, number>} */
   eliminationAnswers: new Map(),
   /** @type {Map<string, number>} */
@@ -179,7 +182,36 @@ const playState = {
   testMode: false,
 };
 
-const TEAM_COLORS = ["#5ad6ff", "#f4c542", "#87f0a8", "#ff8d7a", "#c49cff", "#ff7ecb"];
+const TEAM_COLORS = [
+  "#2f80ed",
+  "#ffbd2e",
+  "#28d17c",
+  "#8752eb",
+  "#eb3b9c",
+  "#13c7d9",
+  "#ff6b2c",
+  "#ef5b68",
+  "#82c91e",
+  "#9b6bff",
+];
+
+function formatScore(value) {
+  return `$${Math.round(Number(value) || 0).toLocaleString()}`;
+}
+
+function formatNumber(value) {
+  return Number(value).toLocaleString(undefined, { maximumFractionDigits: 6 });
+}
+
+function getTeamColor(team) {
+  const index = Math.max(0, playState.teams.findIndex((candidate) => candidate.id === team.id));
+  return TEAM_COLORS[index % TEAM_COLORS.length];
+}
+
+function getSortedTeams(teams = playState.teams) {
+  const setupOrder = new Map(playState.teams.map((team, index) => [team.id, index]));
+  return [...teams].sort((a, b) => b.score - a.score || Number(setupOrder.get(a.id)) - Number(setupOrder.get(b.id)));
+}
 
 async function renderRoute() {
   setActiveNav();
@@ -192,6 +224,7 @@ async function renderRoute() {
 
 async function renderBuildView() {
   document.body.classList.remove("live-game-mode");
+  document.body.classList.remove("play-route");
   const tpl = assert(/** @type {HTMLTemplateElement | null} */ (q("#build-view-template")), "Missing Build template.");
   app.innerHTML = "";
   app.appendChild(tpl.content.cloneNode(true));
@@ -618,6 +651,7 @@ async function renderPlayView() {
   app.appendChild(tpl.content.cloneNode(true));
   playState.isLive = false;
   document.body.classList.remove("live-game-mode");
+  document.body.classList.add("play-route");
 
   try {
     const data = await requestJson("/api/packs?status=ready");
@@ -633,20 +667,16 @@ async function renderPlayView() {
 }
 
 function renderPlaySetup() {
-  const packSelect = assert(/** @type {HTMLSelectElement | null} */ (q("#play-pack-select")), "Pack select missing.");
+  const packCards = assert(/** @type {HTMLDivElement | null} */ (q("#play-pack-cards")), "Pack cards missing.");
   const teamList = assert(/** @type {HTMLDivElement | null} */ (q("#team-list")), "Team list missing.");
   const addTeamBtn = assert(/** @type {HTMLButtonElement | null} */ (q("#add-team-btn")), "Add team button missing.");
   const loadPackBtn = assert(/** @type {HTMLButtonElement | null} */ (q("#load-pack-btn")), "Load pack button missing.");
   const testModeToggle = assert(/** @type {HTMLInputElement | null} */ (q("#test-mode-toggle")), "Test mode toggle missing.");
 
-  packSelect.innerHTML = "";
-  if (!playState.readyPacks.length) {
-    packSelect.innerHTML = `<option value="">No ready packs found</option>`;
-  } else {
-    packSelect.innerHTML = playState.readyPacks
-      .map((pack) => `<option value="${pack.id}">${escapeHtml(pack.title)}</option>`)
-      .join("");
+  if (!playState.readyPacks.some((pack) => pack.id === playState.selectedPackId)) {
+    playState.selectedPackId = playState.readyPacks[0]?.id || "";
   }
+  renderReadyPackCards(packCards);
 
   renderTeamInputs(teamList);
   testModeToggle.checked = Boolean(playState.testMode);
@@ -655,12 +685,15 @@ function renderPlaySetup() {
   };
 
   addTeamBtn.onclick = () => {
+    if (playState.teams.length >= TEAM_COLORS.length) return;
     playState.teams.push({ id: crypto.randomUUID(), name: `Team ${playState.teams.length + 1}`, score: 0 });
     renderTeamInputs(teamList);
+    addTeamBtn.disabled = playState.teams.length >= TEAM_COLORS.length;
   };
+  addTeamBtn.disabled = playState.teams.length >= TEAM_COLORS.length;
 
   loadPackBtn.onclick = async () => {
-    const id = packSelect.value;
+    const id = playState.selectedPackId;
     if (!id) {
       return;
     }
@@ -675,6 +708,8 @@ function renderPlaySetup() {
       playState.awaitingNextRound = false;
       playState.eliminationIndex = 0;
       playState.eliminationRevealed = false;
+      playState.eliminationStage = "guess";
+      playState.eliminationDraggingTeamId = "";
       playState.eliminationAnswers = new Map();
       playState.winnerName = "";
       playState.winnerScore = 0;
@@ -689,6 +724,67 @@ function renderPlaySetup() {
       alert(`Failed to load pack: ${String(error)}`);
     }
   };
+  loadPackBtn.disabled = !playState.selectedPackId;
+}
+
+/**
+ * @param {HTMLElement} container
+ */
+function renderReadyPackCards(container) {
+  container.innerHTML = "";
+  if (!playState.readyPacks.length) {
+    container.innerHTML = `<p class="setup-empty muted">No ready packs found. Add a pack and mark it ready to start.</p>`;
+    return;
+  }
+  playState.readyPacks.forEach((pack) => {
+    const card = document.createElement("button");
+    card.type = "button";
+    card.className = `play-pack-card ${pack.id === playState.selectedPackId ? "selected" : ""}`;
+    card.dataset.readyPackId = pack.id;
+    card.innerHTML = `
+      <span class="pack-card-icon" aria-hidden="true">◫</span>
+      <span class="pack-card-copy">
+        <strong>${escapeHtml(pack.title || "Untitled Pack")}</strong>
+        <span class="muted">Ready to play</span>
+      </span>
+      <span class="pack-selected-check" aria-hidden="true">✓</span>
+    `;
+    container.appendChild(card);
+  });
+  qa("button[data-ready-pack-id]", container).forEach((card) => {
+    if (!(card instanceof HTMLButtonElement)) return;
+    card.addEventListener("click", async () => {
+      playState.selectedPackId = card.dataset.readyPackId || "";
+      renderReadyPackCards(container);
+      const startButton = q("#load-pack-btn");
+      if (startButton instanceof HTMLButtonElement) startButton.disabled = !playState.selectedPackId;
+      try {
+        const { pack } = await requestJson(`/api/packs/${encodeURIComponent(playState.selectedPackId)}`);
+        const copy = q(`[data-ready-pack-id="${playState.selectedPackId}"] .pack-card-copy`, container);
+        if (copy instanceof HTMLElement) {
+          copy.innerHTML = `
+            <strong>${escapeHtml(pack.title || "Untitled Pack")}</strong>
+            <span class="muted">${pack.board.rows * pack.board.cols} questions <b>•</b> ${pack.board.cols} categories</span>
+          `;
+        }
+      } catch {
+        // The start action reports pack loading failures; keep setup selection responsive.
+      }
+    });
+  });
+  qa("button[data-ready-pack-id]", container).forEach((card) => {
+    if (!(card instanceof HTMLButtonElement)) return;
+    const id = card.dataset.readyPackId;
+    if (!id) return;
+    requestJson(`/api/packs/${encodeURIComponent(id)}`).then(({ pack }) => {
+      const copy = q(".pack-card-copy", card);
+      if (!(copy instanceof HTMLElement)) return;
+      copy.innerHTML = `
+        <strong>${escapeHtml(pack.title || "Untitled Pack")}</strong>
+        <span class="muted">${pack.board.rows * pack.board.cols} questions <b>•</b> ${pack.board.cols} categories</span>
+      `;
+    }).catch(() => undefined);
+  });
 }
 
 /**
@@ -699,9 +795,11 @@ function renderTeamInputs(container) {
   playState.teams.forEach((team, index) => {
     const row = document.createElement("div");
     row.className = "team-row";
+    const color = getTeamColor(team);
     row.innerHTML = `
-      <input type="text" data-team-id="${team.id}" value="${escapeAttr(team.name)}" />
-      <button class="button" data-remove-team="${team.id}" ${playState.teams.length <= 1 ? "disabled" : ""}>Remove</button>
+      <span class="setup-team-icon" style="--team-color:${color}" aria-hidden="true">♙</span>
+      <input type="text" aria-label="Team ${index + 1} name" data-team-id="${team.id}" value="${escapeAttr(team.name)}" />
+      <button class="button team-delete-button" data-remove-team="${team.id}" ${playState.teams.length <= 1 ? "disabled" : ""} title="Remove ${escapeAttr(team.name)}" aria-label="Remove ${escapeAttr(team.name)}">⌫</button>
     `;
     container.appendChild(row);
   });
@@ -730,6 +828,8 @@ function renderTeamInputs(container) {
       }
       playState.teams = playState.teams.filter((team) => team.id !== id);
       renderTeamInputs(container);
+      const addButton = q("#add-team-btn");
+      if (addButton instanceof HTMLButtonElement) addButton.disabled = playState.teams.length >= TEAM_COLORS.length;
     });
   });
 }
@@ -816,6 +916,10 @@ function getActiveTeams() {
   return playState.teams.filter((team) => team.score > 0);
 }
 
+function getSortedActiveTeams() {
+  return getSortedTeams(getActiveTeams());
+}
+
 function isBoardComplete() {
   const pack = playState.pack;
   if (!pack) return false;
@@ -834,29 +938,30 @@ function renderHostScorebar(hostScorebar) {
     : "";
   hostScorebar.innerHTML = `
     <div class="host-scorebar-heading">
-      <strong>Scores</strong>
-      <div class="host-scorebar-meta">
-        <span>Correct: <strong>+$${correctScore}</strong> · Incorrect: <strong>-$${incorrectPenalty}</strong></span>
-        ${nextRoundButton}
-        ${playState.testMode ? '<button id="debug-use-all-btn" class="button button-small" title="Debug: use all board clues">Use All</button>' : ""}
-      </div>
+      <strong>TEAMS</strong>
     </div>
     <div class="host-scorebar-grid" id="host-scorebar-grid"></div>
+    <div class="host-scorebar-footer">
+      <span>Current:</span>
+      <strong>${formatScore(correctScore)}</strong>
+      ${nextRoundButton}
+      ${playState.testMode ? '<button id="debug-use-all-btn" class="button button-small" title="Debug: use all board clues">Use All</button>' : ""}
+    </div>
   `;
   const grid = assert(/** @type {HTMLElement | null} */ (q("#host-scorebar-grid", hostScorebar)), "Host score grid missing.");
-  playState.teams.forEach((team) => {
+  getSortedTeams().forEach((team) => {
     const row = document.createElement("div");
     row.className = "host-team-row";
-    const color = TEAM_COLORS[playState.teams.indexOf(team) % TEAM_COLORS.length];
+    const color = getTeamColor(team);
     row.innerHTML = `
       <div class="host-team-name">
         <span class="team-color-dot" style="background:${color}"></span>
         <h4>${escapeHtml(team.name.trim() || "Team")}</h4>
       </div>
-      <strong class="team-score-number">${team.score}</strong>
+      <strong class="team-score-number">${formatScore(team.score)}</strong>
       <div class="score-controls">
-        <button class="button button-small" title="Add the full current clue value" data-host-score="${team.id}" data-dir="plus">+$${correctScore}</button>
-        <button class="button button-small" title="Subtract half the current clue value" data-host-score="${team.id}" data-dir="minus">-$${incorrectPenalty}</button>
+        <button class="button button-small" title="Subtract ${formatScore(incorrectPenalty)}" data-host-score="${team.id}" data-dir="minus">−</button>
+        <button class="button button-small" title="Add ${formatScore(correctScore)}" data-host-score="${team.id}" data-dir="plus">＋</button>
       </div>
     `;
     grid.appendChild(row);
@@ -914,6 +1019,8 @@ function startEliminationRound() {
   playState.awaitingNextRound = false;
   playState.eliminationIndex = 0;
   playState.eliminationRevealed = false;
+  playState.eliminationStage = "guess";
+  playState.eliminationDraggingTeamId = "";
   playState.eliminationAnswers = new Map();
   renderPlayPhase();
 }
@@ -932,7 +1039,7 @@ function renderEliminationRound() {
     return;
   }
   const question = questions[playState.eliminationIndex];
-  const activeTeams = getActiveTeams();
+  const activeTeams = getSortedActiveTeams();
   if (activeTeams.length <= 1) {
     decideWinnerFromScores();
     return;
@@ -948,7 +1055,7 @@ function renderEliminationRound() {
 
   progress.textContent = `Question ${playState.eliminationIndex + 1} of ${questions.length}`;
   prompt.textContent = question.prompt || "(No elimination prompt entered)";
-  reveal.textContent = `Correct number: ${question.answer}`;
+  reveal.textContent = formatNumber(question.answer);
   reveal.classList.toggle("hidden", !playState.eliminationRevealed);
   minLabel.textContent = String(question.min);
   maxLabel.textContent = String(question.max);
@@ -963,6 +1070,7 @@ function renderEliminationRound() {
 
   bindSharedSliderDrag(sliderStack, question, () => undefined);
   renderEliminationTeamValues(values);
+  updateEliminationActionButton();
 }
 
 /**
@@ -970,7 +1078,7 @@ function renderEliminationRound() {
  * @param {EliminationQuestion} question
  */
 function renderSharedSlider(host, question) {
-  const activeTeams = getActiveTeams();
+  const activeTeams = getSortedActiveTeams();
   const denominator = question.max - question.min;
   const answerPct = denominator > 0 ? ((question.answer - question.min) / denominator) * 100 : 0;
   const laneRows = Math.max(1, Math.ceil(activeTeams.length / 2));
@@ -978,7 +1086,7 @@ function renderSharedSlider(host, question) {
   host.innerHTML = `
     <div class="shared-slider-track">
       <div class="shared-slider-answer ${playState.eliminationRevealed ? "" : "hidden"}" style="left:${Math.max(0, Math.min(100, answerPct))}%">
-        <span class="shared-slider-answer-tag">Answer ${question.answer}</span>
+        <span class="shared-slider-answer-tag">Correct Answer<strong>${formatNumber(question.answer)}</strong></span>
       </div>
     </div>
   `;
@@ -986,20 +1094,23 @@ function renderSharedSlider(host, question) {
   activeTeams.forEach((team, index) => {
     const guess = Number(playState.eliminationAnswers.get(team.id) ?? question.min);
     const pct = denominator > 0 ? ((guess - question.min) / denominator) * 100 : 0;
-    const color = TEAM_COLORS[playState.teams.indexOf(team) % TEAM_COLORS.length];
-    const lane = Math.floor(index / 2);
-    const labelOffset = 60 + lane * 30;
-    const labelDir = index % 2 === 0 ? -1 : 1;
+    const color = getTeamColor(team);
+    const lane = Math.floor(index / 2) + 1;
+    const compactLanes = window.innerHeight <= 760 || window.innerWidth <= 1180;
+    const laneDistance = compactLanes ? 26 + lane * 22 : 42 + lane * 34;
+    const laneClass = index % 2 === 0 ? "lane-above" : "lane-below";
     const pin = document.createElement("label");
-    pin.className = "team-pin";
+    pin.className = `team-pin ${laneClass} ${playState.eliminationDraggingTeamId === team.id ? "is-dragging" : ""}`;
     pin.style.left = `${Math.max(0, Math.min(100, pct))}%`;
     pin.style.setProperty("--team-color", color);
-    pin.style.top = "50%";
-    pin.style.setProperty("--label-offset", `${labelOffset}px`);
-    pin.style.setProperty("--label-dir", String(labelDir));
+    pin.style.setProperty("--lane-distance", `${laneDistance}px`);
     pin.dataset.elimTeam = team.id;
+    pin.tabIndex = 0;
+    pin.setAttribute("aria-label", `${team.name}: ${formatNumber(guess)}`);
     pin.innerHTML = `
-      <span class="team-pin-label">${escapeHtml(team.name)} <strong>${guess}</strong></span>
+      <span class="team-pin-connector"></span>
+      <span class="team-pin-endpoint"></span>
+      <span class="team-pin-tooltip">${formatNumber(guess)}</span>
       <span class="team-pin-marker"></span>
     `;
     track.appendChild(pin);
@@ -1027,6 +1138,7 @@ function bindSharedSliderDrag(host, question, onChange) {
         const stepped = Math.round(raw / step) * step;
         const value = Math.max(question.min, Math.min(question.max, stepped));
         playState.eliminationAnswers.set(teamId, value);
+        playState.eliminationDraggingTeamId = teamId;
         renderSharedSlider(host, question);
         bindSharedSliderDrag(host, question, onChange);
         onChange();
@@ -1035,6 +1147,9 @@ function bindSharedSliderDrag(host, question, onChange) {
       const onUp = () => {
         window.removeEventListener("pointermove", onMove);
         window.removeEventListener("pointerup", onUp);
+        playState.eliminationDraggingTeamId = "";
+        renderSharedSlider(host, question);
+        bindSharedSliderDrag(host, question, onChange);
       };
       update(event.clientX);
       window.addEventListener("pointermove", onMove);
@@ -1065,6 +1180,11 @@ async function applyEliminationScoring() {
     renderEliminationTeamValues(values);
   }
   await animateScoreDrops(changes);
+  const slider = q("#team-slider-stack");
+  if (slider instanceof HTMLElement) {
+    renderSharedSlider(slider, question);
+    bindSharedSliderDrag(slider, question, () => undefined);
+  }
   setTimeout(() => {
     playState.lastPenaltyByTeam = new Map();
     const valuesPanel = q("#elim-team-values");
@@ -1079,10 +1199,11 @@ async function applyEliminationScoring() {
  */
 function renderEliminationTeamValues(host) {
   host.innerHTML = "";
-  getActiveTeams().forEach((team) => {
+  host.insertAdjacentHTML("afterbegin", `<div class="host-scorebar-heading"><strong>TEAMS</strong></div>`);
+  getSortedActiveTeams().forEach((team) => {
     const penaltyFlash = playState.lastPenaltyByTeam.get(team.id) || 0;
     const row = document.createElement("div");
-    const color = TEAM_COLORS[playState.teams.indexOf(team) % TEAM_COLORS.length];
+    const color = getTeamColor(team);
     row.className = "host-team-row elim-score-card";
     row.innerHTML = `
       <div class="elim-score-mainline">
@@ -1091,8 +1212,8 @@ function renderEliminationTeamValues(host) {
           <h4>${escapeHtml(team.name)}</h4>
         </div>
         <div class="elim-score-main">
-          <strong class="team-score-number ${penaltyFlash ? "score-drop-anim" : ""}" data-team-score="${team.id}">${team.score}</strong>
-          ${penaltyFlash ? `<span class="score-penalty-pop">-${penaltyFlash}</span>` : ""}
+          <strong class="team-score-number ${penaltyFlash ? "score-drop-anim" : ""}" data-team-score="${team.id}">${formatScore(team.score)}</strong>
+          ${penaltyFlash ? `<span class="score-penalty-pop">−${formatScore(penaltyFlash)}</span>` : ""}
         </div>
       </div>
     `;
@@ -1114,7 +1235,7 @@ function animateScoreDrops(changes) {
         const el = q(`[data-team-score="${change.teamId}"]`);
         if (!(el instanceof HTMLElement)) return;
         const value = Math.round(change.from + (change.to - change.from) * eased);
-        el.textContent = String(value);
+        el.textContent = formatScore(value);
       });
       if (t < 1) {
         requestAnimationFrame(step);
@@ -1135,6 +1256,8 @@ function moveToNextEliminationQuestion() {
   }
   playState.eliminationIndex += 1;
   playState.eliminationRevealed = false;
+  playState.eliminationStage = "guess";
+  playState.eliminationDraggingTeamId = "";
   playState.eliminationAnswers = new Map();
   if (playState.eliminationIndex >= pack.settings.eliminationRound.questions.length) {
     decideWinnerFromScores();
@@ -1169,27 +1292,40 @@ function renderVictory() {
 }
 
 function bindEliminationEvents() {
-  const revealBtn = q("#elim-reveal-answer-btn");
-  const scoreBtn = q("#elim-score-btn");
-  const nextBtn = q("#elim-next-btn");
-  if (revealBtn instanceof HTMLButtonElement) {
-    revealBtn.onclick = () => {
-      playState.eliminationRevealed = true;
-      renderEliminationRound();
+  const actionBtn = q("#elim-action-btn");
+  if (actionBtn instanceof HTMLButtonElement) {
+    actionBtn.onclick = async () => {
+      if (playState.eliminationStage === "guess") {
+        playState.eliminationStage = "revealed";
+        playState.eliminationRevealed = true;
+        renderEliminationRound();
+        return;
+      }
+      if (playState.eliminationStage === "revealed") {
+        actionBtn.disabled = true;
+        await applyEliminationScoring();
+        playState.eliminationStage = "scored";
+        updateEliminationActionButton();
+        return;
+      }
+      if (playState.eliminationStage === "scored") {
+        moveToNextEliminationQuestion();
+        renderPlayPhase();
+      }
     };
   }
-  if (scoreBtn instanceof HTMLButtonElement) {
-    scoreBtn.onclick = async () => {
-      scoreBtn.disabled = true;
-      await applyEliminationScoring();
-      scoreBtn.disabled = false;
-    };
-  }
-  if (nextBtn instanceof HTMLButtonElement) {
-    nextBtn.onclick = () => {
-      moveToNextEliminationQuestion();
-      renderPlayPhase();
-    };
+}
+
+function updateEliminationActionButton() {
+  const actionBtn = q("#elim-action-btn");
+  if (!(actionBtn instanceof HTMLButtonElement)) return;
+  actionBtn.disabled = false;
+  if (playState.eliminationStage === "guess") {
+    actionBtn.textContent = "Reveal Answer";
+  } else if (playState.eliminationStage === "revealed") {
+    actionBtn.textContent = "Apply Penalties";
+  } else {
+    actionBtn.textContent = "Next Question";
   }
 }
 

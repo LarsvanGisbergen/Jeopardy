@@ -51,23 +51,26 @@
     </template>
 
     <template id="play-view-template">
-      <section class="panel" id="play-intro-panel">
-        <h2>Game Host Panel</h2>
-        <p class="muted">Load a ready pack, add teams, and host your game offline.</p>
+      <section class="panel play-host-header" id="play-intro-panel">
+        <div class="play-brand-mark" aria-hidden="true">J</div>
+        <div>
+          <h2>Game Host Panel</h2>
+          <p class="muted">Load a ready pack, add teams, and host your game offline.</p>
+        </div>
       </section>
 
-      <section class="panel" id="play-setup-panel">
-        <h3>Setup</h3>
-        <div class="setup-grid">
-          <label>Ready Pack
-            <select id="play-pack-select"></select>
-          </label>
-          <button id="load-pack-btn" class="button button-primary">Load Pack</button>
+      <section class="panel play-setup-card" id="play-setup-panel">
+        <div class="setup-section-heading">
+          <span class="setup-step-number">1</span>
+          <h3>Setup</h3>
         </div>
+        <p class="setup-label">Choose a pre-made pack</p>
+        <div id="play-pack-cards" class="play-pack-cards"></div>
+        <a href="/build" class="button setup-add-button" data-route-link="/build"><span aria-hidden="true">＋</span> Add Pack</a>
+        <div class="setup-divider"></div>
         <div class="team-controls">
-          <h4>Teams</h4>
           <div id="team-list"></div>
-          <button id="add-team-btn" class="button">Add Team</button>
+          <button id="add-team-btn" class="button setup-add-button"><span aria-hidden="true">＋</span> Add Team</button>
           <label class="test-mode-toggle">
             <input type="checkbox" id="test-mode-toggle" />
             Test mode
@@ -75,35 +78,48 @@
         </div>
       </section>
 
+      <section class="panel play-start-card" id="play-start-panel">
+        <div class="setup-section-heading">
+          <span class="setup-step-number">2</span>
+          <div>
+            <h3>Start game</h3>
+            <p class="muted">Once you're ready, start the game.</p>
+          </div>
+        </div>
+        <button id="load-pack-btn" class="button button-primary play-start-button">▶&nbsp;&nbsp; Start game</button>
+      </section>
+
       <section class="panel hidden" id="play-board-panel">
         <div class="split-heading" id="play-board-header">
           <h3 id="active-pack-title">Board</h3>
           <button id="reset-board-btn" class="button">Reset Used Clues</button>
         </div>
-        <div id="game-board" class="board-grid"></div>
-        <div id="host-scorebar" class="host-scorebar"></div>
+        <div class="live-board-main">
+          <div id="game-board" class="board-grid"></div>
+          <aside id="host-scorebar" class="host-scorebar"></aside>
+        </div>
       </section>
 
       <section class="panel hidden" id="elimination-panel">
-        <div class="elimination-top">
-          <h2>Elimination Round</h2>
-          <p id="elimination-progress" class="muted"></p>
-        </div>
-        <h3 id="elim-question-prompt" class="elim-prompt"></h3>
-        <div class="slider-shell">
-          <div class="slider-axis-labels">
-            <span id="elim-min-label">0</span>
-            <span id="elim-max-label">0</span>
+        <div class="elimination-main">
+          <div class="elimination-top">
+            <span class="round-chip">Elimination Round</span>
+            <span id="elimination-progress" class="round-chip"></span>
           </div>
-          <div id="team-slider-stack" class="team-slider-stack"></div>
-          <p id="elim-answer-reveal" class="elim-answer hidden"></p>
+          <h3 id="elim-question-prompt" class="elim-prompt"></h3>
+          <div class="slider-shell">
+            <div class="slider-axis-labels">
+              <span id="elim-min-label">0</span>
+              <span id="elim-max-label">0</span>
+            </div>
+            <div id="team-slider-stack" class="team-slider-stack"></div>
+            <p id="elim-answer-reveal" class="elim-answer hidden"></p>
+          </div>
+          <div class="dialog-actions elimination-actions">
+            <button id="elim-action-btn" class="button button-primary">Reveal Answer</button>
+          </div>
         </div>
-        <div id="elim-team-values" class="elim-team-values"></div>
-        <div class="dialog-actions">
-          <button id="elim-reveal-answer-btn" class="button button-reveal">Reveal Number</button>
-          <button id="elim-score-btn" class="button button-primary">Apply Penalties</button>
-          <button id="elim-next-btn" class="button">Next Question</button>
-        </div>
+        <aside id="elim-team-values" class="elim-team-values"></aside>
       </section>
 
       <section class="panel hidden" id="victory-panel">

@@ -837,6 +837,835 @@ dialog::backdrop {
   }
 }
 
+/* Redesigned game-host experience */
+body.play-route {
+  background: #091a45;
+}
+
+body.play-route .background-layer {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(26, 91, 184, 0.5), transparent 38%),
+    radial-gradient(circle at 92% 3%, rgba(67, 69, 88, 0.45), transparent 34%),
+    linear-gradient(145deg, #0a255b 0%, #07183f 56%, #0a1c49 100%);
+}
+
+body.play-route .topbar {
+  display: none;
+}
+
+body.play-route .app-shell {
+  width: min(1360px, calc(100vw - 3rem));
+  margin: 1.35rem auto;
+  gap: 0.9rem;
+}
+
+body.play-route .panel {
+  border-color: rgba(157, 177, 219, 0.16);
+  border-radius: 7px;
+  background: rgba(8, 23, 59, 0.77);
+  box-shadow: 0 9px 30px rgba(1, 8, 27, 0.22);
+}
+
+.play-host-header {
+  min-height: 106px;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 1.25rem 2.45rem;
+}
+
+.play-host-header h2 {
+  margin: 0 0 0.7rem;
+  font-size: 1.35rem;
+}
+
+.play-host-header p {
+  font-size: 0.78rem;
+  color: #8290b0;
+}
+
+.play-brand-mark {
+  width: 62px;
+  height: 62px;
+  border-radius: 13px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  color: #49a7ff;
+  background: linear-gradient(145deg, rgba(25, 73, 145, 0.9), rgba(7, 30, 79, 0.95));
+  box-shadow: inset 0 0 28px rgba(47, 128, 237, 0.22);
+  font-size: 2.8rem;
+  line-height: 1;
+  font-weight: 900;
+  text-shadow: 4px 4px 0 #f0bd2a;
+}
+
+.play-setup-card {
+  padding: 1.65rem 2.45rem 2.55rem;
+}
+
+.setup-section-heading {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+}
+
+.setup-section-heading h3,
+.setup-section-heading p {
+  margin: 0;
+}
+
+.setup-step-number {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  background: #287bea;
+  font-weight: 800;
+}
+
+.setup-label {
+  margin: 2rem 0 1.35rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.play-pack-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.play-pack-card {
+  position: relative;
+  min-height: 100px;
+  padding: 1.1rem 1.25rem;
+  border: 1px solid rgba(136, 160, 210, 0.18);
+  border-radius: 8px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 1.1rem;
+  align-items: center;
+  color: var(--ink);
+  background: rgba(31, 51, 91, 0.76);
+  text-align: left;
+  cursor: pointer;
+}
+
+.play-pack-card:hover {
+  background: rgba(40, 65, 113, 0.84);
+}
+
+.play-pack-card.selected {
+  border-color: #1687f5;
+  box-shadow: 0 0 0 1px rgba(22, 135, 245, 0.22);
+}
+
+.pack-card-icon {
+  width: 62px;
+  height: 62px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  color: #eef6ff;
+  background: rgba(39, 66, 113, 0.9);
+  font-size: 2.6rem;
+}
+
+.pack-card-copy {
+  min-width: 0;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.pack-card-copy strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.94rem;
+}
+
+.pack-card-copy .muted {
+  color: #8290b0;
+  font-size: 0.79rem;
+}
+
+.pack-card-copy b {
+  padding: 0 0.45rem;
+}
+
+.pack-selected-check {
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  display: none;
+  place-items: center;
+  align-self: start;
+  color: white;
+  background: #2885f1;
+  font-size: 0.86rem;
+  font-weight: 900;
+}
+
+.play-pack-card.selected .pack-selected-check {
+  display: grid;
+}
+
+.setup-add-button {
+  width: fit-content;
+  min-width: 164px;
+  margin-top: 1.25rem;
+  display: inline-flex;
+  justify-content: center;
+  gap: 0.65rem;
+  color: #dfeaff;
+  text-decoration: none;
+  background: rgba(11, 34, 81, 0.45);
+}
+
+.setup-add-button span {
+  color: #2992ff;
+  font-size: 1.2rem;
+}
+
+.setup-divider {
+  height: 1px;
+  margin: 1.2rem 0 1.35rem;
+  background: rgba(134, 158, 205, 0.1);
+}
+
+.play-setup-card .team-controls {
+  margin: 0;
+}
+
+.play-setup-card .team-row {
+  min-height: 57px;
+  margin-bottom: 0.7rem;
+  padding: 0.5rem 0.65rem 0.5rem 1rem;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.9rem;
+  border: 1px solid rgba(136, 160, 210, 0.16);
+  border-radius: 7px;
+  background: rgba(31, 51, 91, 0.7);
+}
+
+.play-setup-card .team-row input {
+  border: 0;
+  padding: 0.45rem 0;
+  background: transparent;
+  font-weight: 700;
+}
+
+.play-setup-card .team-row input:focus {
+  outline: none;
+  box-shadow: inset 0 -1px #2f80ed;
+}
+
+.setup-team-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--team-color);
+  background: rgba(51, 74, 118, 0.75);
+  font-size: 1.15rem;
+}
+
+.team-delete-button {
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  color: #cf5367;
+  border-color: rgba(207, 83, 103, 0.35);
+  background: rgba(95, 25, 47, 0.13);
+  font-size: 1.35rem;
+}
+
+.test-mode-toggle {
+  float: right;
+  margin-top: 1.5rem;
+  font-size: 0.76rem;
+  opacity: 0.62;
+}
+
+.test-mode-toggle input {
+  width: auto;
+}
+
+.play-start-card {
+  min-height: 108px;
+  padding: 1.35rem 2.45rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.play-start-card .muted {
+  margin-top: 0.7rem;
+  font-size: 0.78rem;
+  color: #8290b0;
+}
+
+.play-start-button {
+  min-width: 180px;
+  min-height: 48px;
+  font-weight: 800;
+  background: linear-gradient(100deg, #1761b5, #3688f1);
+}
+
+.play-start-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.42;
+}
+
+.setup-empty {
+  grid-column: 1 / -1;
+  padding: 2rem;
+  border: 1px dashed rgba(136, 160, 210, 0.24);
+  border-radius: 8px;
+  text-align: center;
+}
+
+body.live-game-mode .app-shell {
+  padding: 0;
+}
+
+body.live-game-mode #play-start-panel {
+  display: none !important;
+}
+
+body.live-game-mode #play-board-panel {
+  height: 100vh;
+  padding: 0.35rem;
+  display: block;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.live-board-main {
+  height: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(245px, 17.2vw, 290px);
+  gap: 0.45rem;
+}
+
+body.live-game-mode .board-grid {
+  height: 100%;
+  padding: 1.2rem;
+  gap: 0.45rem;
+  border: 1px solid rgba(142, 160, 201, 0.15);
+  border-radius: 6px;
+  background: rgba(7, 23, 60, 0.63);
+}
+
+body.live-game-mode .board-header-row,
+body.live-game-mode .board-values-row {
+  gap: 0.45rem;
+}
+
+body.live-game-mode .board-cell {
+  border: 0;
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+body.live-game-mode .board-cell.category {
+  padding: 0.25rem;
+  color: #fff;
+  background: transparent;
+  font-size: clamp(0.85rem, 1.38vw, 1.35rem);
+}
+
+body.live-game-mode .board-cell.value-btn {
+  color: #ffd224;
+  background: linear-gradient(155deg, #145bdc, #063da9 76%);
+  font-size: clamp(1.55rem, 2.5vw, 2.55rem);
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+body.live-game-mode .board-cell.value-btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.09);
+}
+
+body.live-game-mode .board-cell.used {
+  color: rgba(165, 183, 222, 0.35);
+  background: rgba(14, 40, 92, 0.55);
+}
+
+body.live-game-mode .host-scorebar,
+body.live-game-mode .elim-team-values {
+  min-width: 0;
+  max-height: none;
+  margin: 0;
+  padding: 1.45rem 0.9rem 1rem;
+  border: 1px solid rgba(142, 160, 201, 0.15);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  overflow: hidden;
+  background: rgba(7, 21, 54, 0.78);
+}
+
+body.live-game-mode .host-scorebar-heading {
+  min-height: 2.2rem;
+  padding: 0 0.2rem;
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+body.live-game-mode .host-scorebar-grid {
+  min-height: 0;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 0.5rem;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+body.live-game-mode .host-team-row {
+  min-height: 61px;
+  padding: 0.55rem 0.65rem;
+  border-color: rgba(121, 148, 201, 0.14);
+  border-radius: 7px;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 0.45rem;
+  background: rgba(17, 39, 81, 0.72);
+}
+
+body.live-game-mode .host-team-row h4 {
+  font-size: 0.82rem;
+}
+
+body.live-game-mode .team-color-dot {
+  width: 0.72rem;
+  height: 0.72rem;
+  box-shadow: none;
+}
+
+body.live-game-mode .team-score-number {
+  color: #ffd224;
+  font-size: clamp(0.86rem, 1vw, 1rem);
+  white-space: nowrap;
+}
+
+body.live-game-mode .score-controls {
+  gap: 0.4rem;
+}
+
+body.live-game-mode .host-team-row .button-small {
+  min-width: 26px;
+  min-height: 27px;
+  width: 26px;
+  height: 27px;
+  padding: 0;
+  border-color: rgba(138, 164, 213, 0.15);
+  border-radius: 4px;
+  background: rgba(43, 67, 110, 0.72);
+  font-size: 1rem;
+}
+
+.host-scorebar-footer {
+  padding: 0.75rem 0.5rem 0.2rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: 1.05rem;
+}
+
+.host-scorebar-footer strong {
+  color: #ffd224;
+  font-size: 1.2rem;
+}
+
+.host-scorebar-footer #next-round-btn {
+  flex-basis: 100%;
+}
+
+body.live-game-mode #elimination-panel {
+  height: 100vh;
+  padding: 0.35rem;
+  border: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(245px, 17.2vw, 290px);
+  gap: 0.45rem;
+  background: transparent;
+  box-shadow: none;
+}
+
+.elimination-main {
+  min-width: 0;
+  padding: 1.15rem 1.8rem 1rem;
+  border: 1px solid rgba(142, 160, 201, 0.15);
+  border-radius: 6px;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  overflow: hidden;
+  background: rgba(7, 23, 60, 0.63);
+}
+
+.elimination-top {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+}
+
+.elimination-top .round-chip:first-child {
+  justify-self: start;
+}
+
+.elimination-top .round-chip:last-child {
+  grid-column: 2;
+  justify-self: center;
+}
+
+.round-chip {
+  min-width: 158px;
+  padding: 0.65rem 1rem;
+  border: 1px solid rgba(121, 151, 209, 0.26);
+  border-radius: 5px;
+  color: #eaf1ff;
+  background: rgba(20, 54, 110, 0.55);
+  text-align: center;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+body.live-game-mode .elim-prompt {
+  max-width: 1100px;
+  margin: 4.3rem auto 1rem;
+  color: #fff;
+  font-size: clamp(2.2rem, 3.5vw, 3.55rem);
+  line-height: 1.08;
+}
+
+body.live-game-mode .slider-shell {
+  min-height: 0;
+  margin: 0;
+  padding: 0 0.2rem;
+  border: 0;
+  display: grid;
+  grid-template-rows: auto minmax(240px, 1fr);
+  background: transparent;
+}
+
+body.live-game-mode .slider-axis-labels {
+  z-index: 3;
+  margin: 0 0 -2.2rem;
+  align-self: end;
+  color: #43cbef;
+  font-size: clamp(1rem, 1.6vw, 1.45rem);
+}
+
+body.live-game-mode .slider-axis-labels span:last-child {
+  color: #29dc74;
+}
+
+body.live-game-mode .team-slider-stack {
+  min-height: 280px;
+  height: 100%;
+  padding: 0;
+}
+
+body.live-game-mode .shared-slider-track {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 0.7rem;
+  transform: translateY(-50%);
+  background: linear-gradient(90deg, #42c9ed, #e7dc70 48%, #2bd679);
+  box-shadow: none;
+}
+
+.team-pin {
+  top: 50%;
+  width: 0;
+  height: 0;
+  transform: none;
+  outline: none;
+}
+
+.team-pin-marker {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1.45rem;
+  height: 1.45rem;
+  transform: translate(-50%, -50%);
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 2px var(--team-color);
+}
+
+.team-pin-connector {
+  position: absolute;
+  left: -1px;
+  width: 2px;
+  height: var(--lane-distance);
+  background: var(--team-color);
+}
+
+.team-pin.lane-above .team-pin-connector {
+  bottom: 0;
+}
+
+.team-pin.lane-below .team-pin-connector {
+  top: 0;
+}
+
+.team-pin-endpoint {
+  position: absolute;
+  left: 0;
+  width: 1.55rem;
+  height: 1.55rem;
+  border: 3px solid var(--team-color);
+  border-radius: 50%;
+  background: rgba(12, 37, 82, 0.98);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.7);
+  transform: translate(-50%, -50%);
+}
+
+.team-pin.lane-above .team-pin-endpoint {
+  top: calc(-1 * var(--lane-distance));
+}
+
+.team-pin.lane-below .team-pin-endpoint {
+  top: var(--lane-distance);
+}
+
+.team-pin-tooltip {
+  position: absolute;
+  left: 0;
+  z-index: 5;
+  padding: 0.27rem 0.48rem;
+  border: 1px solid var(--team-color);
+  border-radius: 4px;
+  color: white;
+  background: rgba(3, 14, 39, 0.96);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  font-size: 0.78rem;
+  transition: opacity 120ms ease;
+}
+
+.team-pin.lane-above .team-pin-tooltip {
+  top: calc(-1 * var(--lane-distance) - 25px);
+}
+
+.team-pin.lane-below .team-pin-tooltip {
+  top: calc(var(--lane-distance) + 25px);
+}
+
+.team-pin.is-dragging .team-pin-tooltip,
+.team-pin:focus .team-pin-tooltip {
+  opacity: 1;
+}
+
+.shared-slider-answer {
+  top: 1.05rem;
+  bottom: auto;
+  height: 8.5rem;
+  border-left-width: 1px;
+  filter: none;
+}
+
+.shared-slider-answer-tag {
+  top: calc(100% + 0.35rem);
+  left: 0;
+  min-width: 158px;
+  padding: 0.5rem 0.8rem;
+  border: 1px solid rgba(121, 151, 209, 0.26);
+  border-radius: 5px;
+  display: grid;
+  gap: 0.45rem;
+  color: #ffd224;
+  background: rgba(10, 28, 68, 0.96);
+  transform: translateX(-50%);
+  text-align: center;
+  font-size: 0.78rem;
+}
+
+.shared-slider-answer-tag strong {
+  font-size: 1.7rem;
+  font-weight: 500;
+}
+
+body.live-game-mode #elim-answer-reveal {
+  display: none !important;
+}
+
+.elimination-actions {
+  justify-content: flex-end;
+}
+
+.elimination-actions .button {
+  min-width: 144px;
+  min-height: 42px;
+  border-radius: 4px;
+  background: linear-gradient(100deg, #155ba8, #398afb);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+body.live-game-mode .elim-team-values {
+  display: flex;
+  overflow-y: auto;
+}
+
+body.live-game-mode .elim-team-values .host-scorebar-heading {
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+body.live-game-mode .elim-score-card {
+  width: 100%;
+  min-height: 60px;
+  flex: 0 0 auto;
+  padding: 0.55rem 0.65rem;
+}
+
+body.live-game-mode .elim-score-card .team-score-number {
+  font-size: clamp(0.86rem, 1vw, 1rem);
+  text-align: right;
+}
+
+.score-penalty-pop {
+  right: 0;
+  font-size: 0.86rem;
+}
+
+@media (max-width: 1180px), (max-height: 760px) {
+  body.play-route .app-shell {
+    width: calc(100vw - 1.2rem);
+    margin: 0.6rem auto;
+  }
+
+  .play-host-header {
+    min-height: 82px;
+    padding: 0.8rem 1.4rem;
+  }
+
+  .play-brand-mark {
+    width: 50px;
+    height: 50px;
+    font-size: 2.2rem;
+  }
+
+  .play-setup-card {
+    padding: 1rem 1.4rem 1.4rem;
+  }
+
+  .setup-label {
+    margin: 1rem 0 0.7rem;
+  }
+
+  .play-pack-cards {
+    gap: 0.7rem;
+  }
+
+  .play-pack-card {
+    min-height: 78px;
+    padding: 0.65rem 0.8rem;
+  }
+
+  .pack-card-icon {
+    width: 46px;
+    height: 46px;
+    font-size: 2rem;
+  }
+
+  .play-setup-card .team-row {
+    min-height: 48px;
+    margin-bottom: 0.4rem;
+    padding-block: 0.25rem;
+  }
+
+  .play-start-card {
+    min-height: 86px;
+    padding: 0.8rem 1.4rem;
+  }
+
+  .live-board-main,
+  body.live-game-mode #elimination-panel {
+    grid-template-columns: minmax(0, 1fr) 245px;
+  }
+
+  body.live-game-mode .board-grid {
+    padding: 0.6rem;
+  }
+
+  body.live-game-mode .host-scorebar,
+  body.live-game-mode .elim-team-values {
+    padding: 0.8rem 0.55rem 0.6rem;
+  }
+
+  body.live-game-mode .host-team-row,
+  body.live-game-mode .elim-score-card {
+    min-height: 48px;
+    padding: 0.35rem 0.45rem;
+  }
+
+  .elimination-main {
+    padding: 0.75rem 1rem;
+  }
+
+  body.live-game-mode .elim-prompt {
+    margin-top: 1.8rem;
+  }
+
+  body.live-game-mode .team-slider-stack {
+    min-height: 250px;
+  }
+
+  .team-pin-connector {
+    height: calc(var(--lane-distance) * 0.78);
+  }
+
+  .team-pin.lane-above .team-pin-endpoint {
+    top: calc(-0.78 * var(--lane-distance));
+  }
+
+  .team-pin.lane-below .team-pin-endpoint {
+    top: calc(0.78 * var(--lane-distance));
+  }
+
+  .team-pin.lane-above .team-pin-tooltip {
+    top: calc(-0.78 * var(--lane-distance) - 23px);
+  }
+
+  .team-pin.lane-below .team-pin-tooltip {
+    top: calc(0.78 * var(--lane-distance) + 23px);
+  }
+}
+
+body.live-game-mode {
+  overflow: hidden;
+}
+
+body.live-game-mode .app-shell {
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  gap: 0;
+}
+
+body.live-game-mode #play-board-panel,
+body.live-game-mode #elimination-panel,
+body.live-game-mode #victory-panel {
+  height: 100%;
+}
+
 body.live-game-mode .topbar {
   display: none;
 }
@@ -1011,4 +1840,123 @@ body.live-game-mode #elimination-panel .dialog-actions {
   body.live-game-mode .board-cell.value-btn {
     font-size: 1.8rem;
   }
+}
+
+/* Keep redesigned live layouts authoritative over the legacy live-mode rules. */
+body.live-game-mode #play-board-panel {
+  height: 100vh;
+  padding: 0.35rem;
+  display: block;
+}
+
+body.live-game-mode .live-board-main {
+  height: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(245px, 17.2vw, 290px);
+  gap: 0.45rem;
+}
+
+body.live-game-mode .board-grid {
+  height: 100%;
+  gap: 0.45rem;
+}
+
+body.live-game-mode .board-header-row,
+body.live-game-mode .board-values-row {
+  gap: 0.45rem;
+}
+
+body.live-game-mode .host-scorebar {
+  margin: 0;
+  max-height: none;
+  overflow: hidden;
+}
+
+body.live-game-mode .host-scorebar-grid {
+  display: flex;
+  grid-template-columns: none;
+}
+
+body.live-game-mode #elimination-panel {
+  height: 100vh;
+  padding: 0.35rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(245px, 17.2vw, 290px);
+  grid-template-rows: minmax(0, 1fr);
+  align-content: stretch;
+  gap: 0.45rem;
+}
+
+body.live-game-mode .elim-prompt {
+  margin: 4.3rem auto 1rem;
+  font-size: clamp(2.2rem, 3.5vw, 3.55rem);
+}
+
+body.live-game-mode .slider-shell {
+  min-height: 0;
+  margin: 0;
+  padding: 0 0.2rem;
+}
+
+body.live-game-mode .slider-axis-labels {
+  margin: 0 0 -2.2rem;
+  font-size: clamp(1rem, 1.6vw, 1.45rem);
+}
+
+body.live-game-mode .team-slider-stack {
+  min-height: 280px;
+  height: 100%;
+  padding: 0;
+}
+
+body.live-game-mode #elim-team-values {
+  margin: 0;
+  display: flex;
+  grid-template-columns: none;
+  gap: 0.55rem;
+}
+
+body.live-game-mode .elim-score-card {
+  padding: 0.55rem 0.65rem;
+}
+
+body.live-game-mode .elim-score-card .team-score-number {
+  font-size: clamp(0.86rem, 1vw, 1rem);
+}
+
+body.live-game-mode #elimination-panel .dialog-actions {
+  margin-top: 0;
+}
+
+@media (max-width: 1180px), (max-height: 760px) {
+  body.live-game-mode .live-board-main,
+  body.live-game-mode #elimination-panel {
+    grid-template-columns: minmax(0, 1fr) 245px;
+  }
+
+  body.live-game-mode .elim-prompt {
+    margin-top: 1.8rem;
+  }
+
+  body.live-game-mode .team-slider-stack {
+    min-height: 250px;
+  }
+}
+
+body.live-game-mode {
+  overflow: hidden;
+}
+
+body.live-game-mode .app-shell {
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  gap: 0;
+}
+
+body.live-game-mode #play-board-panel,
+body.live-game-mode #elimination-panel,
+body.live-game-mode #victory-panel {
+  height: 100%;
 }
