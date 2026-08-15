@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Local Jeopardy Suite</title>
+    <style>@import url('https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap');</style>
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
@@ -66,11 +67,17 @@
         </div>
         <p class="setup-label">Choose a pre-made pack</p>
         <div id="play-pack-cards" class="play-pack-cards"></div>
-        <a href="/build" class="button setup-add-button" data-route-link="/build"><span aria-hidden="true">＋</span> Add Pack</a>
+        <button id="add-pack-btn" class="button setup-add-button">
+            <span aria-hidden="true" class="setup-add-icon"><img src="/icons/add.svg" alt="+"></span>
+            Add Pack
+        </button>
         <div class="setup-divider"></div>
         <div class="team-controls">
           <div id="team-list"></div>
-          <button id="add-team-btn" class="button setup-add-button"><span aria-hidden="true">＋</span> Add Team</button>
+          <button id="add-team-btn" class="button setup-add-button">
+            <span aria-hidden="true" class="setup-add-icon"><img src="/icons/add.svg" alt="+"></span>
+            Add Team
+          </button>
           <label class="test-mode-toggle">
             <input type="checkbox" id="test-mode-toggle" />
             Test mode

@@ -742,7 +742,7 @@ function renderReadyPackCards(container) {
     card.className = `play-pack-card ${pack.id === playState.selectedPackId ? "selected" : ""}`;
     card.dataset.readyPackId = pack.id;
     card.innerHTML = `
-      <span class="pack-card-icon" aria-hidden="true">◫</span>
+      <span class="pack-card-icon" aria-hidden="true"><img class="pack-logo" src="/icons/pack-logo.svg" alt="◫"></span>
       <span class="pack-card-copy">
         <strong>${escapeHtml(pack.title || "Untitled Pack")}</strong>
         <span class="muted">Ready to play</span>
@@ -797,9 +797,9 @@ function renderTeamInputs(container) {
     row.className = "team-row";
     const color = getTeamColor(team);
     row.innerHTML = `
-      <span class="setup-team-icon" style="--team-color:${color}" aria-hidden="true">♙</span>
+      <span class="setup-team-icon" style="--team-color:${color}" aria-hidden="true"><img class="team-logo" src="/icons/team.svg" alt="♙"></span>
       <input type="text" aria-label="Team ${index + 1} name" data-team-id="${team.id}" value="${escapeAttr(team.name)}" />
-      <button class="button team-delete-button" data-remove-team="${team.id}" ${playState.teams.length <= 1 ? "disabled" : ""} title="Remove ${escapeAttr(team.name)}" aria-label="Remove ${escapeAttr(team.name)}">⌫</button>
+      <button class="button team-delete-button" data-remove-team="${team.id}" ${playState.teams.length <= 1 ? "disabled" : ""} title="Remove ${escapeAttr(team.name)}" aria-label="Remove ${escapeAttr(team.name)}"><img class="remove-team-icon" src="/icons/trash.svg" alt="⌫"></button>
     `;
     container.appendChild(row);
   });
