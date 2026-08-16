@@ -82,6 +82,19 @@ nav a.active-link {
   box-shadow: 0 6px 20px rgba(15, 130, 180, 0.35);
 }
 
+nav a[data-route-link="/play"] {
+  border-color: rgba(135, 240, 168, 0.62);
+  background: linear-gradient(120deg, #16895a, #21ad70);
+  box-shadow: 0 6px 20px rgba(33, 173, 112, 0.3);
+}
+
+nav a[data-route-link="/play"]:hover,
+nav a[data-route-link="/play"].active-link {
+  border-color: rgba(190, 255, 209, 0.9);
+  background: linear-gradient(120deg, #1ca76d, #2bc783);
+  box-shadow: 0 8px 24px rgba(43, 199, 131, 0.42);
+}
+
 .app-shell {
   width: min(1250px, 96vw);
   margin: 1rem auto 2rem;
@@ -634,7 +647,7 @@ dialog::backdrop {
   color: var(--muted);
   margin-bottom: 0.45rem;
   font-weight: 700;
-  font-size: 2rem;
+  font-size: 2.25rem;
 }
 
 .team-slider-stack {
@@ -740,6 +753,18 @@ dialog::backdrop {
 
 .elim-score-main {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.score-penalty-result {
+  margin-top: 0.25rem;
+  color: #ff666d;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+  text-align: right;
 }
 
 .elim-score-mainline {
@@ -1389,9 +1414,17 @@ body.live-game-mode #elimination-panel {
   justify-self: start;
 }
 
-.elimination-top .round-chip:last-child {
+.elimination-top #elimination-progress {
   grid-column: 2;
   justify-self: center;
+}
+
+.elimination-top .elimination-multiplier {
+  grid-column: 3;
+  justify-self: end;
+  border-color: rgba(244, 197, 66, 0.48);
+  color: #ffe477;
+  background: rgba(112, 79, 7, 0.38);
 }
 
 .round-chip {
@@ -1603,6 +1636,10 @@ body.live-game-mode .elim-score-card {
 body.live-game-mode .elim-score-card .team-score-number {
   font-size: clamp(0.86rem, 1vw, 1rem);
   text-align: right;
+}
+
+body.live-game-mode .score-penalty-result {
+  font-size: clamp(0.72rem, 0.9vw, 0.86rem);
 }
 
 .score-penalty-pop {
@@ -1966,7 +2003,7 @@ body.live-game-mode .slider-shell {
 
 body.live-game-mode .slider-axis-labels {
   margin: 0 0 -2.2rem;
-  font-size: clamp(1rem, 1.6vw, 1.45rem);
+  font-size: clamp(1.25rem, 2vw, 1.8rem);
 }
 
 body.live-game-mode .team-slider-stack {

@@ -19,6 +19,7 @@
  *   max: number;
  *   answer: number;
  *   step: number;
+ *   incorrectMultiplier: number;
  * }} EliminationQuestion
  */
 
@@ -123,10 +124,13 @@ function normalizePack(pack) {
   }
   pack.settings.eliminationRound.questions = pack.settings.eliminationRound.questions.map((question) => ({
     prompt: String(question?.prompt || ""),
-    min: Number.isFinite(Number(question?.min)) ? Number(question.min) : 0,
-    max: Number.isFinite(Number(question?.max)) ? Number(question.max) : 1000,
-    answer: Number.isFinite(Number(question?.answer)) ? Number(question.answer) : 0,
-    step: Number.isFinite(Number(question?.step)) && Number(question.step) > 0 ? Number(question.step) : 1,
+    min: Number.isFinite(Number(question?.min)) ? Math.round(Number(question.min)) : 0,
+    max: Number.isFinite(Number(question?.max)) ? Math.round(Number(question.max)) : 1000,
+    answer: Number.isFinite(Number(question?.answer)) ? Math.round(Number(question.answer)) : 0,
+    step: Number.isFinite(Number(question?.step)) && Number(question.step) > 0 ? Math.max(1, Math.round(Number(question.step))) : 1,
+    incorrectMultiplier: Number.isFinite(Number(question?.incorrectMultiplier)) && Number(question.incorrectMultiplier) > 0
+      ? Math.max(1, Math.round(Number(question.incorrectMultiplier)))
+      : 1,
   }));
 }
 
@@ -200,7 +204,7 @@ function formatScore(value) {
 }
 
 function formatNumber(value) {
-  return Number(value).toLocaleString(undefined, { maximumFractionDigits: 6 });
+  return Math.round(Number(value) || 0).toLocaleString();
 }
 
 function getTeamColor(team) {
@@ -281,6 +285,14 @@ async function renderBuildView() {
 function bindBuildCreateActions() {
   const createBtn = assert(/** @type {HTMLButtonElement | null} */ (q("#create-pack-btn")), "Create button missing.");
   createBtn.addEventListener("click", async () => {
+    const numericInputs = qa('input[type="number"]', app);
+    const invalidInput = numericInputs.find((input) => input instanceof HTMLInputElement
+      && (!input.checkValidity() || !Number.isInteger(Number(input.value))));
+    if (invalidInput instanceof HTMLInputElement) {
+      invalidInput.reportValidity();
+      invalidInput.focus();
+      return;
+    }
     const title = assert(/** @type {HTMLInputElement | null} */ (q("#new-pack-title")), "Missing title input.").value;
     const rows = Number(assert(/** @type {HTMLInputElement | null} */ (q("#new-pack-rows")), "Missing rows input.").value);
     const cols = Number(assert(/** @type {HTMLInputElement | null} */ (q("#new-pack-cols")), "Missing cols input.").value);
@@ -471,7 +483,7 @@ function renderEditorPanel() {
       clueCard.innerHTML = `
         <strong>Row ${rIndex + 1}</strong>
         <label>Value
-          <input type="number" min="1" data-type="clue-value" data-col="${cIndex}" data-row="${rIndex}" value="${clue.value}" />
+          <input type="number" min="1" step="1" data-type="clue-value" data-col="${cIndex}" data-row="${rIndex}" value="${clue.value}" />
         </label>
         <label>Question
           <textarea data-type="clue-question" data-col="${cIndex}" data-row="${rIndex}">${escapeHtml(clue.question)}</textarea>
@@ -502,16 +514,19 @@ function renderEditorPanel() {
       </label>
       <div class="create-pack-grid">
         <label>Min
-          <input type="number" data-elim="min" data-idx="${index}" value="${question.min}" />
+          <input type="number" step="1" data-elim="min" data-idx="${index}" value="${question.min}" />
         </label>
         <label>Max
-          <input type="number" data-elim="max" data-idx="${index}" value="${question.max}" />
+          <input type="number" step="1" data-elim="max" data-idx="${index}" value="${question.max}" />
         </label>
         <label>Correct Answer
-          <input type="number" data-elim="answer" data-idx="${index}" value="${question.answer}" />
+          <input type="number" step="1" data-elim="answer" data-idx="${index}" value="${question.answer}" />
         </label>
         <label>Step
-          <input type="number" min="1" data-elim="step" data-idx="${index}" value="${question.step}" />
+          <input type="number" min="1" step="1" data-elim="step" data-idx="${index}" value="${question.step}" />
+        </label>
+        <label>Incorrect Multiplier
+          <input type="number" required min="1" step="1" data-elim="incorrectMultiplier" data-idx="${index}" value="${question.incorrectMultiplier}" />
         </label>
       </div>
     `;
@@ -556,6 +571,19 @@ function bindEditorActions(panel, pack) {
   const setStatusBtn = assert(/** @type {HTMLButtonElement | null} */ (q("#set-status-btn", panel)), "Missing status button.");
   const addElimBtn = assert(/** @type {HTMLButtonElement | null} */ (q("#add-elimination-question-btn", panel)), "Missing elimination add button.");
 
+  const numericInputsAreValid = () => {
+    const inputs = qa('input[type="number"]', panel);
+    const invalid = inputs.find((input) => input instanceof HTMLInputElement
+      && ((input.hasAttribute("required") && !input.value.trim())
+        || (input.value.trim() && (!input.checkValidity() || !Number.isInteger(Number(input.value))))));
+    if (invalid instanceof HTMLInputElement) {
+      invalid.reportValidity();
+      invalid.focus();
+      return false;
+    }
+    return true;
+  };
+
   const syncFromInputs = () => {
     pack.title = titleInput.value.trim() || "Untitled Pack";
     pack.board.categories.forEach((category, cIndex) => {
@@ -581,12 +609,14 @@ function bindEditorActions(panel, pack) {
       const maxInput = /** @type {HTMLInputElement | null} */ (q(`input[data-elim="max"][data-idx="${index}"]`, panel));
       const answerInput = /** @type {HTMLInputElement | null} */ (q(`input[data-elim="answer"][data-idx="${index}"]`, panel));
       const stepInput = /** @type {HTMLInputElement | null} */ (q(`input[data-elim="step"][data-idx="${index}"]`, panel));
+      const multiplierInput = /** @type {HTMLInputElement | null} */ (q(`input[data-elim="incorrectMultiplier"][data-idx="${index}"]`, panel));
       return {
         prompt: promptInput ? promptInput.value : question.prompt,
         min: minInput ? Number(minInput.value) : question.min,
         max: maxInput ? Number(maxInput.value) : question.max,
         answer: answerInput ? Number(answerInput.value) : question.answer,
         step: stepInput ? Math.max(1, Number(stepInput.value) || 1) : question.step,
+        incorrectMultiplier: multiplierInput ? Number(multiplierInput.value) : question.incorrectMultiplier,
       };
     });
   };
@@ -598,6 +628,7 @@ function bindEditorActions(panel, pack) {
       max: 1000,
       answer: 500,
       step: 1,
+      incorrectMultiplier: 1,
     });
     renderEditorPanel();
   });
@@ -617,6 +648,7 @@ function bindEditorActions(panel, pack) {
   });
 
   saveBtn.addEventListener("click", async () => {
+    if (!numericInputsAreValid()) return;
     try {
       syncFromInputs();
       pack.status = pack.status === "ready" ? "draft" : pack.status;
@@ -634,6 +666,7 @@ function bindEditorActions(panel, pack) {
   });
 
   validateBtn.addEventListener("click", async () => {
+    if (!numericInputsAreValid()) return;
     try {
       syncFromInputs();
       await requestJson(`/api/packs/${encodeURIComponent(pack.id)}`, {
@@ -653,6 +686,7 @@ function bindEditorActions(panel, pack) {
   });
 
   setStatusBtn.addEventListener("click", async () => {
+    if (!numericInputsAreValid()) return;
     const target = /** @type {PackStatus} */ (statusSelect.value);
     try {
       syncFromInputs();
@@ -1093,6 +1127,7 @@ function renderEliminationRound() {
   }
 
   const progress = assert(/** @type {HTMLElement | null} */ (q("#elimination-progress")), "Elimination progress missing.");
+  const multiplier = assert(/** @type {HTMLElement | null} */ (q("#elimination-multiplier")), "Elimination multiplier missing.");
   const prompt = assert(/** @type {HTMLElement | null} */ (q("#elim-question-prompt")), "Elimination prompt missing.");
   const reveal = assert(/** @type {HTMLElement | null} */ (q("#elim-answer-reveal")), "Elimination reveal missing.");
   const minLabel = assert(/** @type {HTMLElement | null} */ (q("#elim-min-label")), "Elimination min label missing.");
@@ -1101,6 +1136,7 @@ function renderEliminationRound() {
   const values = assert(/** @type {HTMLElement | null} */ (q("#elim-team-values")), "Elimination team values missing.");
 
   progress.textContent = `Question ${playState.eliminationIndex + 1} of ${questions.length}`;
+  multiplier.textContent = `Multiplier × ${question.incorrectMultiplier}`;
   prompt.textContent = question.prompt || "(No elimination prompt entered)";
   reveal.textContent = formatNumber(question.answer);
   reveal.classList.toggle("hidden", !playState.eliminationRevealed);
@@ -1215,12 +1251,13 @@ async function applyEliminationScoring() {
   const changes = [];
   getActiveTeams().forEach((team) => {
     const guess = Number(playState.eliminationAnswers.get(team.id) ?? question.min);
-    const penalty = Math.abs(guess - question.answer);
+    const penalty = Math.abs(guess - question.answer) * question.incorrectMultiplier;
     const from = team.score;
     const to = Math.max(0, team.score - penalty);
+    const appliedPenalty = from - to;
     team.score = to;
-    playState.lastPenaltyByTeam.set(team.id, penalty);
-    changes.push({ teamId: team.id, from, to, penalty });
+    playState.lastPenaltyByTeam.set(team.id, appliedPenalty);
+    changes.push({ teamId: team.id, from, to, penalty: appliedPenalty });
   });
   const values = q("#elim-team-values");
   if (values instanceof HTMLElement) {
@@ -1232,13 +1269,6 @@ async function applyEliminationScoring() {
     renderSharedSlider(slider, question);
     bindSharedSliderDrag(slider, question, () => undefined);
   }
-  setTimeout(() => {
-    playState.lastPenaltyByTeam = new Map();
-    const valuesPanel = q("#elim-team-values");
-    if (valuesPanel instanceof HTMLElement) {
-      renderEliminationTeamValues(valuesPanel);
-    }
-  }, 1100);
 }
 
 /**
@@ -1248,8 +1278,10 @@ function renderEliminationTeamValues(host) {
   const previousScoreOrder = captureScoreOrder(host);
   host.innerHTML = "";
   host.insertAdjacentHTML("afterbegin", `<div class="host-scorebar-heading"><strong>TEAMS</strong></div>`);
-  getSortedActiveTeams().forEach((team) => {
-    const penaltyFlash = playState.lastPenaltyByTeam.get(team.id) || 0;
+  const visibleTeams = playState.teams.filter((team) => team.score > 0 || playState.lastPenaltyByTeam.has(team.id));
+  getSortedTeams(visibleTeams).forEach((team) => {
+    const hasPenalty = playState.lastPenaltyByTeam.has(team.id);
+    const penalty = playState.lastPenaltyByTeam.get(team.id) || 0;
     const row = document.createElement("div");
     const color = getTeamColor(team);
     row.className = "host-team-row elim-score-card";
@@ -1261,8 +1293,9 @@ function renderEliminationTeamValues(host) {
           <h4>${escapeHtml(team.name)}</h4>
         </div>
         <div class="elim-score-main">
-          <strong class="team-score-number ${penaltyFlash ? "score-drop-anim" : ""}" data-team-score="${team.id}">${formatScore(team.score)}</strong>
-          ${penaltyFlash ? `<span class="score-penalty-pop">−${formatScore(penaltyFlash)}</span>` : ""}
+          <strong class="team-score-number ${penalty > 0 ? "score-drop-anim" : ""}" data-team-score="${team.id}">${formatScore(team.score)}</strong>
+          ${penalty > 0 ? `<span class="score-penalty-pop">−${formatScore(penalty)}</span>` : ""}
+          ${hasPenalty ? `<span class="score-penalty-result">−${formatScore(penalty)}</span>` : ""}
         </div>
       </div>
     `;
@@ -1300,6 +1333,7 @@ function animateScoreDrops(changes) {
 function moveToNextEliminationQuestion() {
   const pack = playState.pack;
   if (!pack) return;
+  playState.lastPenaltyByTeam = new Map();
   if (getActiveTeams().length <= 1) {
     decideWinnerFromScores();
     return;

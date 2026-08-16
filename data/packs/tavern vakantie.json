@@ -3,7 +3,7 @@
   "title": "Tavern Vakantie",
   "status": "ready",
   "createdAt": "2026-08-10T12:00:00.000Z",
-  "updatedAt": "2026-08-10T12:00:00.000Z",
+  "updatedAt": "2026-08-16T14:48:41.743Z",
   "board": {
     "rows": 6,
     "cols": 6,
@@ -80,7 +80,7 @@
             "question": "Hoe heet de grens rond een zwart gat waarbinnen niets meer kan ontsnappen?",
             "answer": "Event horizon",
             "value": 500,
-            "dailyDouble": false
+            "dailyDouble": true
           },
           {
             "question": "Hoe heet het natuurkundige effect waarbij de golflengte van licht en geluid verandert doordat bron en waarnemer ten opzichte van elkaar bewegen?",
@@ -115,7 +115,7 @@
             "question": "Welke League of Legends-champion heeft een ultimate genaamd \"The Skies Descend\"?",
             "answer": "Aurelion Sol",
             "value": 400,
-            "dailyDouble": false
+            "dailyDouble": true
           },
           {
             "question": "Hoeveel dollar kost een AWP in Counter Strike 2?",
@@ -150,7 +150,7 @@
             "question": "In welk land werd de moderne sauna-cultuur beroemd en ontwikkeld?",
             "answer": "Finland",
             "value": 300,
-            "dailyDouble": false
+            "dailyDouble": true
           },
           {
             "question": "Welke wereldwijd bekende instantmaaltijd werd in 1958 in Japan uitgevonden door Momofuku Ando?",
@@ -185,7 +185,7 @@
             "question": "Welke rivier stroomt door Londen?",
             "answer": "Thames",
             "value": 200,
-            "dailyDouble": false
+            "dailyDouble": true
           },
           {
             "question": "Welke bergketen vormt een groot deel van de grens tussen Frankrijk en Spanje?",
@@ -220,7 +220,7 @@
             "question": "Welke kleur krijg je als je blauw en geel mengt?",
             "answer": "Groen",
             "value": 100,
-            "dailyDouble": false
+            "dailyDouble": true
           },
           {
             "question": "Welk bordspel bevat straten als Kalverstraat en Leidsestraat in de Nederlandse versie?",
@@ -258,7 +258,32 @@
   },
   "settings": {
     "eliminationRound": {
-      "questions": []
+      "questions": [
+        {
+          "prompt": "Hoeveel chromosomen heeft een normale (niet van mijn jungler) menselijke lichaamscel?",
+          "min": 1,
+          "max": 100,
+          "answer": 46,
+          "step": 1,
+          "incorrectMultiplier": 10
+        },
+        {
+          "prompt": "Hoeveel landen grenzen direct aan Duitsland?",
+          "min": 1,
+          "max": 12,
+          "answer": 9,
+          "step": 1,
+          "incorrectMultiplier": 100
+        },
+        {
+          "prompt": "Hoeveel jaar ouder is Nintendo dan de eerste PlayStation?",
+          "min": 1,
+          "max": 250,
+          "answer": 105,
+          "step": 1,
+          "incorrectMultiplier": 10
+        }
+      ]
     }
   }
 }

@@ -228,21 +228,24 @@
           "min": 100,
           "max": 5000,
           "answer": 1000,
-          "step": 50
+          "step": 50,
+          "incorrectMultiplier": 1
         },
         {
           "prompt": "How many minutes are in one day?",
           "min": 60,
           "max": 3000,
           "answer": 1440,
-          "step": 10
+          "step": 10,
+          "incorrectMultiplier": 1
         },
         {
           "prompt": "How many bones does an adult human typically have?",
           "min": 100,
           "max": 300,
           "answer": 206,
-          "step": 1
+          "step": 1,
+          "incorrectMultiplier": 1
         }
       ]
     }

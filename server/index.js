@@ -32,6 +32,7 @@ const PORT = Number(process.env.PORT || 8787);
  *   max: number;
  *   answer: number;
  *   step: number;
+ *   incorrectMultiplier: number;
  * }} EliminationQuestion
  */
 
@@ -125,8 +126,8 @@ function buildDefaultCategories(rows, cols, startValue, step) {
 function createPackTemplate(input = {}) {
   const rows = Number.isInteger(input.rows) ? /** @type {number} */ (input.rows) : 5;
   const cols = Number.isInteger(input.cols) ? /** @type {number} */ (input.cols) : 6;
-  const startValue = Number.isFinite(input.startValue) ? Math.max(1, Number(input.startValue)) : 100;
-  const valueStep = Number.isFinite(input.valueStep) ? Math.max(1, Number(input.valueStep)) : 100;
+  const startValue = Number.isFinite(input.startValue) ? Math.max(1, Math.round(Number(input.startValue))) : 100;
+  const valueStep = Number.isFinite(input.valueStep) ? Math.max(1, Math.round(Number(input.valueStep))) : 100;
   const now = new Date().toISOString();
 
   return {
@@ -149,6 +150,7 @@ function createPackTemplate(input = {}) {
             max: 1000,
             answer: 500,
             step: 1,
+            incorrectMultiplier: 1,
           },
         ],
       },
@@ -363,8 +365,8 @@ function validatePack(pack) {
       if (!clue.answer || !String(clue.answer).trim()) {
         errors.push(`${tag}: answer is required.`);
       }
-      if (!Number.isFinite(Number(clue.value)) || Number(clue.value) <= 0) {
-        errors.push(`${tag}: value must be a positive number.`);
+      if (!Number.isInteger(Number(clue.value)) || Number(clue.value) <= 0) {
+        errors.push(`${tag}: value must be a positive whole number.`);
       }
     });
   });
@@ -383,17 +385,20 @@ function validatePack(pack) {
       if (!question.prompt || !String(question.prompt).trim()) {
         errors.push(`${tag}: prompt is required.`);
       }
-      if (!Number.isFinite(Number(question.min))) {
-        errors.push(`${tag}: min must be numeric.`);
+      if (!Number.isInteger(Number(question.min))) {
+        errors.push(`${tag}: min must be a whole number.`);
       }
-      if (!Number.isFinite(Number(question.max))) {
-        errors.push(`${tag}: max must be numeric.`);
+      if (!Number.isInteger(Number(question.max))) {
+        errors.push(`${tag}: max must be a whole number.`);
       }
-      if (!Number.isFinite(Number(question.answer))) {
-        errors.push(`${tag}: answer must be numeric.`);
+      if (!Number.isInteger(Number(question.answer))) {
+        errors.push(`${tag}: answer must be a whole number.`);
       }
-      if (!Number.isFinite(Number(question.step)) || Number(question.step) <= 0) {
-        errors.push(`${tag}: step must be a positive number.`);
+      if (!Number.isInteger(Number(question.step)) || Number(question.step) <= 0) {
+        errors.push(`${tag}: step must be a positive whole number.`);
+      }
+      if (!Number.isInteger(Number(question.incorrectMultiplier)) || Number(question.incorrectMultiplier) <= 0) {
+        errors.push(`${tag}: incorrect multiplier is required and must be a positive whole number.`);
       }
       const min = Number(question.min);
       const max = Number(question.max);

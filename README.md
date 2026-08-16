@@ -41,6 +41,9 @@ Each pack is stored in `data/packs/<id>.json`:
 - Category: `name`, `clues[]`
 - Clue: `question`, `answer`, `value`, `dailyDouble`
 - `settings.eliminationRound.questions[]`
+- Slider question: `prompt`, `min`, `max`, `answer`, `step`, `incorrectMultiplier`
+
+An incorrect slider answer subtracts `abs(answer - guess) * incorrectMultiplier` from the team's score.
 
 `data/index.json` stores lightweight list metadata for fast listing.
 

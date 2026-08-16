@@ -12,7 +12,6 @@
     <header class="topbar">
       <h1>Local Jeopardy Suite</h1>
       <nav>
-        <a href="/build" data-route-link="/build">Build</a>
         <a href="/play" data-route-link="/play">Play</a>
       </nav>
     </header>
@@ -26,10 +25,10 @@
 
         <div class="create-pack-grid">
           <label>Title <input id="new-pack-title" type="text" placeholder="Friday Trivia Night" /></label>
-          <label>Columns <input id="new-pack-cols" type="number" min="1" max="12" value="6" /></label>
-          <label>Rows <input id="new-pack-rows" type="number" min="1" max="10" value="5" /></label>
-          <label>Start Value <input id="new-pack-start-value" type="number" min="1" value="100" /></label>
-          <label>Value Step <input id="new-pack-step-value" type="number" min="1" value="100" /></label>
+          <label>Columns <input id="new-pack-cols" type="number" min="1" max="12" step="1" value="6" /></label>
+          <label>Rows <input id="new-pack-rows" type="number" min="1" max="10" step="1" value="5" /></label>
+          <label>Start Value <input id="new-pack-start-value" type="number" min="1" step="1" value="100" /></label>
+          <label>Value Step <input id="new-pack-step-value" type="number" min="1" step="1" value="100" /></label>
           <button id="create-pack-btn" class="button button-primary">Create Pack</button>
         </div>
       </section>
@@ -114,6 +113,7 @@
           <div class="elimination-top">
             <span class="round-chip">Elimination Round</span>
             <span id="elimination-progress" class="round-chip"></span>
+            <span id="elimination-multiplier" class="round-chip elimination-multiplier"></span>
           </div>
           <h3 id="elim-question-prompt" class="elim-prompt"></h3>
           <div class="slider-shell">
