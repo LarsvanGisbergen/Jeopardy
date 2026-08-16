@@ -213,6 +213,50 @@ function getSortedTeams(teams = playState.teams) {
   return [...teams].sort((a, b) => b.score - a.score || Number(setupOrder.get(a.id)) - Number(setupOrder.get(b.id)));
 }
 
+/**
+ * Capture leaderboard positions before a render so reordered rows can slide
+ * smoothly from their previous position to their new one.
+ * @param {HTMLElement} host
+ */
+function captureScoreOrder(host) {
+  const positions = new Map();
+  const order = [];
+  qa("[data-score-team]", host).forEach((row) => {
+    if (!(row instanceof HTMLElement) || !row.dataset.scoreTeam) return;
+    order.push(row.dataset.scoreTeam);
+    positions.set(row.dataset.scoreTeam, row.getBoundingClientRect());
+  });
+  return { positions, order };
+}
+
+/**
+ * @param {HTMLElement} host
+ * @param {{ positions: Map<string, DOMRect>; order: string[] }} previous
+ */
+function animateScoreOrder(host, previous) {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const rows = qa("[data-score-team]", host).filter((row) => row instanceof HTMLElement);
+  const nextOrder = rows.map((row) => /** @type {HTMLElement} */ (row).dataset.scoreTeam || "");
+  if (!previous.order.length || previous.order.join("|") === nextOrder.join("|")) return;
+
+  rows.forEach((row) => {
+    if (!(row instanceof HTMLElement) || !row.dataset.scoreTeam) return;
+    const from = previous.positions.get(row.dataset.scoreTeam);
+    if (!from) return;
+    const to = row.getBoundingClientRect();
+    const deltaX = from.left - to.left;
+    const deltaY = from.top - to.top;
+    if (Math.abs(deltaX) < 1 && Math.abs(deltaY) < 1) return;
+    row.animate(
+      [
+        { transform: `translate(${deltaX}px, ${deltaY}px)` },
+        { transform: "translate(0, 0)" },
+      ],
+      { duration: 360, easing: "cubic-bezier(0.22, 1, 0.36, 1)" },
+    );
+  });
+}
+
 async function renderRoute() {
   setActiveNav();
   if (location.pathname.startsWith("/play")) {
@@ -931,6 +975,7 @@ function isBoardComplete() {
  * @param {HTMLElement} hostScorebar
  */
 function renderHostScorebar(hostScorebar) {
+  const previousScoreOrder = captureScoreOrder(hostScorebar);
   const correctScore = playState.lastClueValue;
   const incorrectPenalty = playState.lastClueValue / 2;
   const nextRoundButton = isBoardComplete()
@@ -952,6 +997,7 @@ function renderHostScorebar(hostScorebar) {
   getSortedTeams().forEach((team) => {
     const row = document.createElement("div");
     row.className = "host-team-row";
+    row.dataset.scoreTeam = team.id;
     const color = getTeamColor(team);
     row.innerHTML = `
       <div class="host-team-name">
@@ -966,6 +1012,7 @@ function renderHostScorebar(hostScorebar) {
     `;
     grid.appendChild(row);
   });
+  animateScoreOrder(hostScorebar, previousScoreOrder);
 
   qa("button[data-host-score]", hostScorebar).forEach((button) => {
     if (!(button instanceof HTMLButtonElement)) return;
@@ -1198,6 +1245,7 @@ async function applyEliminationScoring() {
  * @param {HTMLElement} host
  */
 function renderEliminationTeamValues(host) {
+  const previousScoreOrder = captureScoreOrder(host);
   host.innerHTML = "";
   host.insertAdjacentHTML("afterbegin", `<div class="host-scorebar-heading"><strong>TEAMS</strong></div>`);
   getSortedActiveTeams().forEach((team) => {
@@ -1205,6 +1253,7 @@ function renderEliminationTeamValues(host) {
     const row = document.createElement("div");
     const color = getTeamColor(team);
     row.className = "host-team-row elim-score-card";
+    row.dataset.scoreTeam = team.id;
     row.innerHTML = `
       <div class="elim-score-mainline">
         <div class="host-team-name">
@@ -1219,6 +1268,7 @@ function renderEliminationTeamValues(host) {
     `;
     host.appendChild(row);
   });
+  animateScoreOrder(host, previousScoreOrder);
 }
 
 /**
