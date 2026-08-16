@@ -1,79 +1,45 @@
 # Local Jeopardy Suite
 
-Local-first Jeopardy hosting toolkit with two modes:
-- **Build**: Create and validate game packs (`Draft`, `Ready`, `Archived`)
-- **Play**: Host a Jeopardy-style round with teams, scoring, and Daily Double markers
+Local Jeopardy game-pack builder and host. Requires Node.js 20 or newer.
 
-Everything runs locally and stores data as JSON files under `data/packs`.
+## Setup
 
-## Requirements
-
-- Node.js 20+
-
-## Run (Browser)
+Install dependencies after cloning the repository:
 
 ```powershell
-node server/index.js
+npm install
 ```
 
-Then open:
+## Run locally in a browser
 
-- [http://localhost:8787/build](http://localhost:8787/build) for builder
-- [http://localhost:8787/play](http://localhost:8787/play) for game host mode
+```powershell
+npm start
+```
 
-## Friend Distribution (Windows)
+Open [http://localhost:8787/build](http://localhost:8787/build) to manage packs or [http://localhost:8787/play](http://localhost:8787/play) to host a game.
 
-Create a single portable executable and share just that file:
+## Run locally as a desktop app
 
-- `release\Local Jeopardy Suite <version>.exe`
+```powershell
+npm run electron
+```
 
-For friends, usage is simply:
+## Export a Windows executable
 
-1. Double-click the `.exe`
-2. Play
+Create a single portable `.exe` that can run without installation:
 
-## Data Model
+```powershell
+npm run package:portable
+```
 
-Each pack is stored in `data/packs/<id>.json`:
+The executable is written to `release\Local Jeopardy Suite <version>.exe`. Copy that file to another Windows computer and launch it directly.
 
-- `id`, `title`, `status`, `createdAt`, `updatedAt`
-- `board.rows`, `board.cols`, `board.categories[]`
-- Category: `name`, `clues[]`
-- Clue: `question`, `answer`, `value`, `dailyDouble`
-- `settings.eliminationRound.questions[]`
-- Slider question: `prompt`, `min`, `max`, `answer`, `step`, `incorrectMultiplier`
+Alternatively, create an unpacked Windows application folder:
 
-An incorrect slider answer subtracts `abs(answer - guess) * incorrectMultiplier` from the team's score.
+```powershell
+npm run package:win
+```
 
-`data/index.json` stores lightweight list metadata for fast listing.
+The unpacked application is written to `release\LocalJeopardySuite-win32-x64\`, with the executable at `release\LocalJeopardySuite-win32-x64\Jeopardy.exe`.
 
-## API
-
-- `GET /api/packs`
-- `POST /api/packs`
-- `GET /api/packs/:id`
-- `PUT /api/packs/:id`
-- `POST /api/packs/:id/validate`
-- `POST /api/packs/:id/status`
-
-Status change to `ready` is blocked until validation passes.
-
-## Validation Rules
-
-`Ready` requires:
-- non-empty pack title
-- positive integer `rows` and `cols`
-- exactly `cols` categories
-- each category has a non-empty name
-- each category has exactly `rows` clues
-- each clue has non-empty `question` and `answer`
-- each clue has a positive numeric `value`
-
-Warnings (non-blocking):
-- duplicate category names
-
-## Notes
-
-- Editing is local JSON only; no internet dependency at runtime.
-- `Play` only lists packs with status `ready`.
-- A game session (used clues + scores) is in browser memory and resets on reload.
+Move or delete older contents from `release\` before packaging if you want it to contain only the newest export.

@@ -3,7 +3,7 @@
   "title": "Tavern Vakantie",
   "status": "ready",
   "createdAt": "2026-08-10T12:00:00.000Z",
-  "updatedAt": "2026-08-16T15:27:00.581Z",
+  "updatedAt": "2026-08-16T15:41:54.761Z",
   "board": {
     "rows": 6,
     "cols": 6,
@@ -44,7 +44,7 @@
           {
             "question": "Hoe heet de demon lord die bekendstaat als de Prince of Demons en vaak wordt afgebeeld met twee bavianenkoppen en tentakelarmen in D&D?",
             "answer": "Demogorgon",
-            "value": 750,
+            "value": 600,
             "dailyDouble": true
           }
         ]
@@ -85,7 +85,7 @@
           {
             "question": "Hoe heet het natuurkundige effect waarbij de golflengte van licht en geluid verandert doordat bron en waarnemer ten opzichte van elkaar bewegen?",
             "answer": "Doppler effect",
-            "value": 750,
+            "value": 600,
             "dailyDouble": false
           }
         ]
@@ -126,7 +126,7 @@
           {
             "question": "In Baldur’s Gate 3, welk wapen heb je nodig om de ketenen van Orpheus te breken?",
             "answer": "Orphic Hammer",
-            "value": 750,
+            "value": 600,
             "dailyDouble": false
           }
         ]
@@ -167,7 +167,7 @@
           {
             "question": "Het Engelse woord “candidate” komt van het Latijnse candidus, omdat Romeinse kandidaten kleding droegen van welke kleur?",
             "answer": "Wit",
-            "value": 750,
+            "value": 600,
             "dailyDouble": false
           }
         ]
@@ -208,7 +208,7 @@
           {
             "question": "Welk land heeft, inclusief overzeese gebieden, de meeste tijdzones ter wereld?",
             "answer": "Frankrijk",
-            "value": 750,
+            "value": 600,
             "dailyDouble": false
           }
         ]
@@ -249,7 +249,7 @@
           {
             "question": "Welke kleur heeft de “black box” van een vliegtuig in werkelijkheid meestal?",
             "answer": "Oranje",
-            "value": 750,
+            "value": 600,
             "dailyDouble": false
           }
         ]
