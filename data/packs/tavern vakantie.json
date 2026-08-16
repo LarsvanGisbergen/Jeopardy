@@ -3,7 +3,7 @@
   "title": "Tavern Vakantie",
   "status": "ready",
   "createdAt": "2026-08-10T12:00:00.000Z",
-  "updatedAt": "2026-08-16T14:48:41.743Z",
+  "updatedAt": "2026-08-16T15:27:00.581Z",
   "board": {
     "rows": 6,
     "cols": 6,
@@ -282,6 +282,62 @@
           "answer": 105,
           "step": 1,
           "incorrectMultiplier": 10
+        },
+        {
+          "prompt": "Hoeveel nieuwe League of Legends-champions zijn er uitgebracht vanaf 1 januari 2018 tot nu?",
+          "min": 1,
+          "max": 100,
+          "answer": 34,
+          "step": 1,
+          "incorrectMultiplier": 10
+        },
+        {
+          "prompt": "Hoe oud was Albert Einstein toen hij  zijn beroemde artikel over de speciale relativiteitstheorie publiceerde?",
+          "min": 18,
+          "max": 70,
+          "answer": 26,
+          "step": 1,
+          "incorrectMultiplier": 10
+        },
+        {
+          "prompt": "Hoeveel uur na de release van WoW Classic bereikte de eerste speler ter wereld level 60?",
+          "min": 1,
+          "max": 200,
+          "answer": 79,
+          "step": 1,
+          "incorrectMultiplier": 5
+        },
+        {
+          "prompt": "Hoeveel verschillende blokken waren er beschikbaar in Minecraft Classic uit 2009?",
+          "min": 1,
+          "max": 100,
+          "answer": 32,
+          "step": 1,
+          "incorrectMultiplier": 10
+        },
+        {
+          "prompt": "Hoeveel liter bloed heeft een gemiddelde volwassen mens ongeveer in het lichaam?",
+          "min": 1,
+          "max": 20,
+          "answer": 5,
+          "step": 1,
+          "incorrectMultiplier": 50
+        },
+        {
+          "prompt": "Hoeveel kilometer bedraagt de omtrek van de aarde rond de evenaar afgerond op duizendtallen?",
+          "min": 20,
+          "max": 50,
+          "answer": 40,
+          "step": 1,
+          "incorrectMultiplier": 50
+        },
+        {
+          "prompt": "Toen Julius Caesar en Cleopatra elkaar in 48 v.Chr. ontmoetten, hoeveel jaar ouder was Caesar dan Cleopatra?",
+          "min": 10,
+          "max": 50,
+          "answer": 31,
+          "step": 1,
+          "incorrectMultiplier": 50
         }
       ]
     }

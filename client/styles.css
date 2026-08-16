@@ -226,6 +226,25 @@ textarea {
   gap: 0.6rem;
 }
 
+#save-pack-btn {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 90;
+  min-width: 150px;
+  min-height: 48px;
+  padding: 0.75rem 1.15rem;
+  border-color: rgba(128, 225, 255, 0.65);
+  box-shadow: 0 10px 28px rgba(1, 8, 27, 0.5), 0 0 18px rgba(20, 164, 212, 0.25);
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+#save-pack-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 13px 32px rgba(1, 8, 27, 0.58), 0 0 22px rgba(20, 164, 212, 0.38);
+}
+
 .board-editor {
   overflow: auto;
 }
@@ -877,6 +896,11 @@ dialog::backdrop {
   }
   nav a {
     min-width: 110px;
+  }
+  #save-pack-btn {
+    right: 0.75rem;
+    bottom: 0.75rem;
+    min-width: 132px;
   }
   .setup-grid {
     grid-template-columns: 1fr;
