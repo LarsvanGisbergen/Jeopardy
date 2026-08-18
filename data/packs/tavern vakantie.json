@@ -338,6 +338,22 @@
           "answer": 31,
           "step": 1,
           "incorrectMultiplier": 50
+        },
+        {
+          "prompt": "Hoeveel Pokémon zaten er in de originele eerste generatie Pokémon-games?",
+          "min": 50,
+          "max": 200,
+          "answer": 151,
+          "step": 1,
+          "incorrectMultiplier": 10
+        },
+        {
+          "prompt": "Hoeveel Mastery Points (in miljoenen) heeft de hoogste mastery speler ter wereld?",
+          "min": 5,
+          "max": 50,
+          "answer": 37,
+          "step": 1,
+          "incorrectMultiplier": 20
         }
       ]
     }
